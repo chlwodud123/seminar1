@@ -184,7 +184,7 @@
                                 오늘의 행운 로또 번호를 추첨해 보세요!
                             </h1>
                             <p class="text-xs sm:text-sm text-slate-300">
-                                원하는 게임 수(1·3·5게임)를 선택하고 <strong class="text-white">번호 추첨하기</strong> 버튼을 누르면 즉시 번호가 생성됩니다.
+                                원하는 게임 수(1·3·5·10게임)를 선택하고 <strong class="text-white">번호 추첨하기</strong> 버튼을 누르면 즉시 번호가 생성됩니다.
                             </p>
                         </div>
 
@@ -215,6 +215,10 @@
                                 <button type="button" onclick="setGameCount(5)" id="count-btn-5"
                                     class="game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm">
                                     5게임 (1장)
+                                </button>
+                                <button type="button" onclick="setGameCount(10)" id="count-btn-10"
+                                    class="game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-200 hover:text-white">
+                                    10게임 (2장)
                                 </button>
                             </div>
                         </div>
@@ -395,7 +399,7 @@
         let soundEnabled = true; // Web Audio API 효과음 여부
         let audioCtx = null;
 
-        const GAME_LABELS = ['A', 'B', 'C', 'D', 'E'];
+        const GAME_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
         // --- 초기화 ---
         window.addEventListener('DOMContentLoaded', () => {
@@ -562,10 +566,10 @@
             chevron.classList.toggle('rotate-180');
         }
 
-        // --- 4. 게임 세트 수 변경 (1게임 / 3게임 / 5게임) ---
+        // --- 4. 게임 세트 수 변경 (1게임 / 3게임 / 5게임 / 10게임) ---
         function setGameCount(count) {
             gameCount = count;
-            [1, 3, 5].forEach(c => {
+            [1, 3, 5, 10].forEach(c => {
                 const btn = document.getElementById(`count-btn-${c}`);
                 if (c === count) {
                     btn.className = 'game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm';
