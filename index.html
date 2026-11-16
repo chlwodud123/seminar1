@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로또 6/45 스마트 번호 추첨기 | Lotto 6/45 Generator</title>
-    <!-- Tailwind CSS CDN -->
+    <title>스마트 금융·복리 계산기 & 재테크 가이드</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Pretendard / Noto Sans KR Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 
     <script>
         tailwind.config = {
@@ -19,8 +19,18 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Noto Sans KR"', '"Inter"', 'sans-serif'],
-                        mono: ['"Inter"', 'monospace']
+                        sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
                     }
                 }
             }
@@ -28,985 +38,1504 @@
     </script>
 
     <style>
-        /* 동행복권 6/45 공식 번호대별 3D 볼 스타일 */
-        .lotto-ball {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9999px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 800;
-            color: #ffffff;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.38);
-            box-shadow:
-                inset -4px -5px 10px rgba(0, 0, 0, 0.28),
-                inset 3px 3px 8px rgba(255, 255, 255, 0.55),
-                0 6px 14px -2px rgba(15, 23, 42, 0.22);
-            user-select: none;
-            transform: scale(0);
-            opacity: 0;
-            animation: ballPopIn 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        body {
+            font-family: 'Pretendard', sans-serif;
         }
-
-        /* 상단 하이라이트 광택 효과 */
-        .lotto-ball::after {
-            content: '';
-            position: absolute;
-            top: 12%;
-            left: 18%;
-            width: 34%;
-            height: 22%;
-            border-radius: 9999px;
-            background: radial-gradient(circle, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 80%);
-            transform: rotate(-25deg);
-            pointer-events: none;
-        }
-
-        /* 1 ~ 10: 노란색 (#fbc400) */
-        .ball-yellow {
-            background: radial-gradient(circle at 30% 30%, #ffd94a, #fbc400 62%, #d49b00 100%);
-        }
-        /* 11 ~ 20: 파란색 (#69c8f2) */
-        .ball-blue {
-            background: radial-gradient(circle at 30% 30%, #96dfff, #69c8f2 62%, #2b95c9 100%);
-        }
-        /* 21 ~ 30: 빨간색 (#ff7272) */
-        .ball-red {
-            background: radial-gradient(circle at 30% 30%, #ffa3a3, #ff7272 62%, #d83b3b 100%);
-        }
-        /* 31 ~ 40: 회색 (#888888) */
-        .ball-gray {
-            background: radial-gradient(circle at 30% 30%, #b5b5b5, #888888 62%, #595959 100%);
-        }
-        /* 41 ~ 45: 초록색 (#b0d840) */
-        .ball-green {
-            background: radial-gradient(circle at 30% 30%, #cef06d, #b0d840 62%, #7ba314 100%);
-        }
-
-        @keyframes ballPopIn {
-            0% {
-                transform: scale(0.2) translateY(18px) rotate(-25deg);
-                opacity: 0;
-            }
-            70% {
-                transform: scale(1.08) translateY(-3px) rotate(4deg);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1) translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        /* 배경 도트 패턴 */
-        .bg-grid-pattern {
-            background-image: radial-gradient(rgba(99, 102, 241, 0.14) 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-        .dark .bg-grid-pattern {
-            background-image: radial-gradient(rgba(129, 140, 248, 0.12) 1px, transparent 1px);
-        }
-
-        /* 커스텀 스크롤바 */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: transparent;
+            background: rgba(156, 163, 175, 0.1);
         }
         ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+            background: rgba(107, 114, 128, 0.4);
+            border-radius: 9999px;
         }
-        .dark ::-webkit-scrollbar-thumb {
-            background: #334155;
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 0.6);
+        }
+        input[type="range"] {
+            accent-color: #2563eb;
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white !important;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-300 selection:bg-indigo-600 selection:text-white">
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 min-h-screen flex flex-col">
 
-    <!-- 상단 헤더 -->
-    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <!-- 브랜드 로고 -->
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-600 via-blue-600 to-sky-500 flex items-center justify-center text-white font-black text-base shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-                    6/45
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+                    <i class="fa-solid fa-chart-line text-lg"></i>
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">로또 6/45 행운 추첨기</span>
-                        <span class="hidden sm:inline-block text-[11px] font-bold text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-0.5 rounded-full border border-indigo-200/70 dark:border-indigo-800">SMART PICK</span>
-                    </div>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">동행복권 공식 색상 규격 · 고정수/제외수 필터 · 실시간 조합 분석</p>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                        FinSmart <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">실질 금융 시뮬레이터</span>
+                    </h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 hidden sm:block">단리·복리 원리부터 세금·물가·예적금·배당·대출 비교까지 한눈에</p>
                 </div>
-            </a>
+            </div>
 
-            <!-- 우측 유틸리티 (효과음 & 다크모드) -->
-            <div class="flex items-center gap-2">
-                <!-- 효과음 토글 -->
-                <button id="sound-toggle" type="button" onclick="toggleSound()" title="추첨 효과음 켜기/끄기"
-                    class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1.5 transition-colors">
-                    <i id="sound-icon" class="fa-solid fa-volume-high text-indigo-600 dark:text-indigo-400"></i>
-                    <span id="sound-label" class="hidden sm:inline">효과음 ON</span>
-                </button>
-
-                <!-- 다크 모드 토글 -->
-                <button id="theme-toggle" type="button" onclick="toggleTheme()" aria-label="테마 전환"
-                    class="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors">
-                    <i id="theme-icon-dark" class="fa-solid fa-moon text-sm"></i>
-                    <i id="theme-icon-light" class="fa-solid fa-sun text-sm hidden text-amber-400"></i>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="#glossary-section" class="text-xs sm:text-sm font-medium px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-book-open mr-1.5 text-blue-600 dark:text-blue-400"></i>핵심 금융사전
+                </a>
+                <button id="themeToggleBtn" onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="다크모드 전환">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- 메인 콘텐츠 -->
-    <main class="flex-1 bg-grid-pattern py-8 sm:py-12">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
 
-            <!-- 1. 메인 컨트롤 & 추첨 대시보드 카드 -->
-            <section class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xl shadow-slate-900/5 overflow-hidden">
-                
-                <!-- 상단 배너 및 컨트롤 바 -->
-                <div class="p-6 sm:p-8 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white relative overflow-hidden">
-                    <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none"></div>
-                    <div class="absolute -left-16 -bottom-16 w-64 h-64 rounded-full bg-sky-500/10 blur-3xl pointer-events-none"></div>
+        <!-- Hero & 3 Core Financial Principles Banner -->
+        <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white p-6 sm:p-8 shadow-xl">
+            <div class="relative z-10 max-w-3xl space-y-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-medium">
+                    <i class="fa-solid fa-sparkles"></i> 숫자 너머의 진짜 자산 가치를 계산하세요
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight leading-snug">
+                    단순 이자 계산을 넘어, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-emerald-300">세금과 물가까지 반영한</span> 실질 재테크 가이드
+                </h2>
+                <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+                    많은 금융 계산기가 세전 표면 금리만 보여줍니다. 하지만 실제 내 손에 쥐는 돈은 <strong>복리 기간, 이자소득세(15.4%), 물가상승률(인플레이션), 납입 방식(예금 vs 적금)</strong>에 따라 완전히 달라집니다. 아래 5가지 탭에서 개념 설명과 함께 직접 시뮬레이션해 보세요.
+                </p>
+            </div>
 
-                    <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                        <div class="space-y-2">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm text-sky-300 text-xs font-semibold">
-                                <i class="fa-solid fa-clover text-emerald-400"></i>
-                                <span>1 ~ 45 무작위 난수 추첨 & 조합 밸런스 분석</span>
-                            </div>
-                            <h1 class="text-2xl sm:text-3xl font-black tracking-tight">
-                                오늘의 행운 로또 번호를 추첨해 보세요!
-                            </h1>
-                            <p class="text-xs sm:text-sm text-slate-300">
-                                원하는 게임 수(1·3·5·10게임)를 선택하고 <strong class="text-white">번호 추첨하기</strong> 버튼을 누르면 즉시 번호가 생성됩니다.
-                            </p>
-                        </div>
-
-                        <!-- 핵심 추첨 액션 버튼 -->
-                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                            <button id="draw-btn" type="button" onclick="generateLottoGames()"
-                                class="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 hover:from-amber-300 hover:to-orange-300 text-slate-950 font-black text-base sm:text-lg shadow-lg shadow-amber-500/25 active:scale-95 transition-all cursor-pointer">
-                                <i class="fa-solid fa-wand-magic-sparkles text-lg group-hover:rotate-12 transition-transform"></i>
-                                <span>번호 추첨하기</span>
-                            </button>
-                        </div>
+            <!-- 3 Quick Concept Summary Cards -->
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/10">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/10">
+                    <div class="flex items-center gap-2.5 text-blue-300 font-semibold text-sm mb-1">
+                        <i class="fa-solid fa-snowball"></i> 1. 단리 vs 복리의 결정적 차이
                     </div>
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        <strong>단리</strong>는 원금에만 이자가 붙어 선형으로 증가하지만, <strong>복리</strong>는 '원금+이자'에 다시 이자가 붙어 시간이 지날수록 눈덩이처럼 기하급수적으로 불어납니다.
+                    </p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/10">
+                    <div class="flex items-center gap-2.5 text-emerald-300 font-semibold text-sm mb-1">
+                        <i class="fa-solid fa-shield-halved"></i> 2. 세금(15.4%)과 인플레이션의 함정
+                    </div>
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        이자에서 <strong>15.4% 세금</strong>을 떼고 나면 수익률이 줄어들고, 매년 오르는 <strong>물가상승률</strong>만큼 미래 화폐의 실제 구매력은 낮아집니다.
+                    </p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/10">
+                    <div class="flex items-center gap-2.5 text-amber-300 font-semibold text-sm mb-1">
+                        <i class="fa-solid fa-scale-balanced"></i> 3. 적금 금리 착시 & 대출 상환 효과
+                    </div>
+                    <p class="text-xs text-slate-200 leading-relaxed">
+                        연 4% 적금의 실제 이자는 예금의 <strong>절반 수준(약 2.17%)</strong>이며, 연 5% 대출을 갚는 것은 <strong>세전 5.91% 확정 수익 투자</strong>와 같습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-                    <!-- 하단 옵션 컨트롤 바 (게임 수 선택 / 보너스 볼 / 고정·제외수 필터 열기) -->
-                    <div class="relative z-10 mt-6 pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-                        <!-- 게임 세트 수 선택 -->
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-semibold text-slate-300 mr-1">추첨 세트:</span>
-                            <div class="inline-flex p-1 rounded-xl bg-white/10 backdrop-blur-sm">
-                                <button type="button" onclick="setGameCount(1)" id="count-btn-1"
-                                    class="game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-200 hover:text-white">
-                                    1게임
-                                </button>
-                                <button type="button" onclick="setGameCount(3)" id="count-btn-3"
-                                    class="game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-200 hover:text-white">
-                                    3게임
-                                </button>
-                                <button type="button" onclick="setGameCount(5)" id="count-btn-5"
-                                    class="game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm">
-                                    5게임 (1장)
-                                </button>
-                                <button type="button" onclick="setGameCount(10)" id="count-btn-10"
-                                    class="game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-200 hover:text-white">
-                                    10게임 (2장)
-                                </button>
-                            </div>
-                        </div>
+        <!-- 5 Interactive Feature Navigation Tabs -->
+        <nav class="bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2" role="tablist">
+                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn tab-active flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-chart-area text-base"></i>
+                    <span>1. 단리·복리 & 물가</span>
+                </button>
+                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-piggy-bank text-base"></i>
+                    <span>2. 예금 vs 적금 비교</span>
+                </button>
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-coins text-base"></i>
+                    <span>3. 배당 재투자 스노우볼</span>
+                </button>
+                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-bullseye text-base"></i>
+                    <span>4. 목표 금액 역산</span>
+                </button>
+                <button onclick="switchTab('tab5')" id="btn-tab5" class="tab-btn col-span-2 sm:col-span-1 flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-hand-holding-dollar text-base"></i>
+                    <span>5. 대출상환 vs 투자</span>
+                </button>
+            </div>
+        </nav>
 
-                        <!-- 우측 필터 및 보너스볼 옵션 -->
-                        <div class="flex flex-wrap items-center gap-2.5">
-                            <!-- 보너스 번호 표시 토글 -->
-                            <label class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold cursor-pointer select-none transition-colors">
-                                <input id="bonus-toggle" type="checkbox" checked onchange="generateLottoGames()" class="w-4 h-4 accent-amber-400 rounded cursor-pointer">
-                                <span>2등 보너스볼 포함</span>
-                            </label>
-
-                            <!-- 고정수/제외수 설정 패널 열기 버튼 -->
-                            <button type="button" onclick="toggleFilterPanel()" id="filter-panel-btn"
-                                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600/80 hover:bg-indigo-500 text-white text-xs font-bold border border-indigo-400/30 transition-all">
-                                <i class="fa-solid fa-sliders"></i>
-                                <span>고정수 / 제외수 설정</span>
-                                <span id="filter-badge" class="px-1.5 py-0.5 rounded-md bg-white/20 text-[10px] font-mono">0</span>
-                                <i id="filter-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform"></i>
-                            </button>
-                        </div>
+        <!-- ==========================================
+             TAB 1: 단리 vs 복리 & 세금·물가 필터
+             ========================================== -->
+        <section id="tab1" class="tab-panel space-y-6">
+            <!-- Concept Explanation Banner -->
+            <div class="bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/60 rounded-2xl p-5 sm:p-6">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                            💡 핵심 개념 설명: 단리 vs 복리, 그리고 '실질 구매력'이란?
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            • <strong>단리(Simple Interest):</strong> 처음에 넣은 <strong>원금에 대해서만</strong> 약정된 이자가 붙는 방식입니다. 만기까지 매년 발생하는 이자 금액이 동일합니다.<br>
+                            • <strong>복리(Compound Interest):</strong> 발생한 <strong>이자가 다시 원금에 합산</strong>되어, 다음 해에는 '원금+이자' 전체에 이자가 붙는 방식입니다. 기간이 길어질수록 단리와의 격차가 눈덩이처럼 커집니다.<br>
+                            • <strong>세금 & 물가상승률 필터:</strong> 한국에서 일반 예·적금 이자에는 <strong>15.4%(이자소득세 14% + 지방소득세 1.4%)</strong>가 부과됩니다. 또한 매년 물가가 2.5%씩 오른다면 10년 뒤의 1억 원은 지금의 1억 원보다 구매력이 낮아지므로, <strong>물가상승률을 차감한 '실질 현재 가치'</strong>를 반드시 함께 확인해야 합니다.
+                        </p>
                     </div>
                 </div>
+            </div>
 
-                <!-- 2. 접이식 고정수 / 제외수 설정 패널 (반자동 시뮬레이션) -->
-                <div id="filter-panel" class="hidden border-b border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-800/50 p-6 transition-all">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Input Panel -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-blue-600"></i> 투자 조건 입력
+                        </h4>
+                        <button onclick="resetTab1()" class="text-xs text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 font-medium">
+                            <i class="fa-solid fa-rotate-left mr-1"></i>기본값 복원
+                        </button>
+                    </div>
+
+                    <!-- 초기 거치금 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">초기 거치금 (목돈)</label>
+                            <span id="t1_init_kr" class="text-blue-600 dark:text-blue-400 font-bold">1,000만 원</span>
+                        </div>
+                        <input type="number" id="t1_initial" value="10000000" step="1000000" min="0" oninput="calcTab1()"
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="addAmount('t1_initial', 1000000, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 font-medium">+100만</button>
+                            <button onclick="addAmount('t1_initial', 5000000, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 font-medium">+500만</button>
+                            <button onclick="addAmount('t1_initial', 10000000, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 font-medium">+1,000만</button>
+                            <button onclick="setAmount('t1_initial', 0, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-medium">0원</button>
+                        </div>
+                    </div>
+
+                    <!-- 월 적립금 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">매월 추가 적립금</label>
+                            <span id="t1_monthly_kr" class="text-blue-600 dark:text-blue-400 font-bold">50만 원</span>
+                        </div>
+                        <input type="number" id="t1_monthly" value="500000" step="100000" min="0" oninput="calcTab1()"
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white font-semibold focus:ring-2 focus:ring-blue-500 outline-none">
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="addAmount('t1_monthly', 100000, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 font-medium">+10만</button>
+                            <button onclick="addAmount('t1_monthly', 500000, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 font-medium">+50만</button>
+                            <button onclick="addAmount('t1_monthly', 1000000, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-900/40 text-slate-600 dark:text-slate-300 font-medium">+100만</button>
+                            <button onclick="setAmount('t1_monthly', 0, calcTab1)" class="px-2.5 py-1 text-xs rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-medium">0원</button>
+                        </div>
+                    </div>
+
+                    <!-- 연 이자율 / 기대수익률 -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">연 이자율 / 기대수익률 (%)</label>
+                            <span class="font-bold text-blue-600 dark:text-blue-400"><span id="t1_rate_val">7.0</span>%</span>
+                        </div>
+                        <input type="range" id="t1_rate" min="1" max="20" step="0.5" value="7" oninput="calcTab1()" class="w-full">
+                        <div class="flex justify-between text-xs text-slate-400">
+                            <span>예적금(3~4%)</span>
+                            <span>배당·지수(7~10%)</span>
+                            <span>고수익(15~20%)</span>
+                        </div>
+                    </div>
+
+                    <!-- 투자 기간 (년) -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">투자 기간 (년)</label>
+                            <span class="font-bold text-blue-600 dark:text-blue-400"><span id="t1_years_val">15</span>년</span>
+                        </div>
+                        <input type="range" id="t1_years" min="1" max="40" step="1" value="15" oninput="calcTab1()" class="w-full">
+                        <div class="flex justify-between text-xs text-slate-400">
+                            <span>1년</span>
+                            <span>10년</span>
+                            <span>20년</span>
+                            <span>30년</span>
+                            <span>40년</span>
+                        </div>
+                    </div>
+
+                    <!-- 세금 및 물가상승률 필터 -->
+                    <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-4">
                         <div>
-                            <h2 class="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                                <i class="fa-solid fa-thumbtack text-indigo-600 dark:text-indigo-400"></i>
-                                <span>반자동 번호 필터 (고정수 & 제외수 설정)</span>
-                            </h2>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                꼭 포함하고 싶은 <strong>고정수(최대 5개)</strong>나 추첨에서 뺄 <strong>제외수(최대 35개)</strong>를 클릭해 지정하세요.
-                            </p>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">과세 구분 (이자/배당소득세)</label>
+                            <select id="t1_tax" onchange="calcTab1()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="0.154">일반과세 (15.4% 차감)</option>
+                                <option value="0.095">세금우대 / 조합예탁금 (9.5% 차감)</option>
+                                <option value="0">비과세 / ISA·연금계좌 과세이연 (0%)</option>
+                            </select>
                         </div>
 
-                        <!-- 선택 모드 스위치 & 초기화 -->
-                        <div class="flex flex-wrap items-center gap-2">
-                            <div class="inline-flex p-1 rounded-xl bg-slate-200/80 dark:bg-slate-900 border border-slate-300/60 dark:border-slate-700">
-                                <button type="button" id="mode-fixed-btn" onclick="setFilterMode('fixed')"
-                                    class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-sm transition-all">
-                                    📌 고정수 선택 (<span id="fixed-count">0</span>/5)
-                                </button>
-                                <button type="button" id="mode-excluded-btn" onclick="setFilterMode('excluded')"
-                                    class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all">
-                                    🚫 제외수 선택 (<span id="excluded-count">0</span>/35)
-                                </button>
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between text-sm">
+                                <label class="font-semibold text-slate-700 dark:text-slate-300">예상 연평균 물가상승률 (인플레이션)</label>
+                                <span class="font-bold text-amber-600 dark:text-amber-400"><span id="t1_inflation_val">2.5</span>%</span>
                             </div>
-
-                            <button type="button" onclick="resetFilters()"
-                                class="px-3 py-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/50 text-slate-600 dark:text-slate-300 hover:text-rose-600 border border-slate-200 dark:border-slate-700 text-xs font-bold transition-colors">
-                                <i class="fa-solid fa-rotate-left mr-1"></i>필터 초기화
-                            </button>
+                            <input type="range" id="t1_inflation" min="0" max="6" step="0.5" value="2.5" oninput="calcTab1()" class="w-full">
+                            <p class="text-xs text-slate-400">※ 한국은행 중기 물가안정목표 수준은 약 2.0~2.5%입니다.</p>
                         </div>
-                    </div>
-
-                    <!-- 1 ~ 45 번호 그리드 -->
-                    <div id="number-picker-grid" class="grid grid-cols-9 sm:grid-cols-15 gap-1.5 sm:gap-2 pt-2" style="grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));">
-                        <!-- JS에서 1~45 버튼 동적 생성 -->
-                    </div>
-
-                    <!-- 현재 적용된 필터 상태 표시줄 -->
-                    <div class="mt-4 pt-3 border-t border-slate-200/80 dark:border-slate-700/70 flex flex-wrap items-center justify-between gap-2 text-xs">
-                        <div class="flex flex-wrap items-center gap-4">
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-600 inline-block"></span>
-                                <span class="font-semibold text-slate-600 dark:text-slate-300">고정수:</span>
-                                <span id="fixed-list-text" class="font-mono font-bold text-indigo-600 dark:text-indigo-400">없음 (완전 자동)</span>
-                            </div>
-                            <div class="flex items-center gap-1.5">
-                                <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
-                                <span class="font-semibold text-slate-600 dark:text-slate-300">제외수:</span>
-                                <span id="excluded-list-text" class="font-mono font-bold text-rose-500 dark:text-rose-400">없음</span>
-                            </div>
-                        </div>
-                        <span class="text-[11px] text-slate-400">* 고정수 설정 시 결과에 '반자동' 배지가 표시됩니다.</span>
                     </div>
                 </div>
 
-                <!-- 3. 추첨 결과 출력 스테이지 -->
-                <div class="p-6 sm:p-8">
-                    <!-- 결과 헤더 및 전체 복사 버튼 -->
-                    <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
-                            <h2 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
-                                추첨 결과 <span id="current-draw-mode-badge" class="ml-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">자동 5게임</span>
-                            </h2>
+                <!-- Right Output & Chart Panel -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Summary KPI Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">총 납입 원금 (초기 + 월적립)</span>
+                            <div id="t1_out_principal" class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1">1억 원</div>
+                            <div id="t1_out_principal_exact" class="text-xs text-slate-400 mt-0.5">100,000,000원</div>
                         </div>
 
-                        <div class="flex items-center gap-2">
-                            <button type="button" onclick="copyCurrentResults()"
-                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-colors">
-                                <i class="fa-regular fa-copy text-indigo-600 dark:text-indigo-400"></i>
-                                <span>현재 번호 전체 복사</span>
-                            </button>
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">단리 만기 수령액 (세후)</span>
+                            <div id="t1_out_simple" class="text-xl sm:text-2xl font-extrabold text-slate-700 dark:text-slate-200 mt-1">1억 5,200만 원</div>
+                            <div id="t1_out_simple_sub" class="text-xs text-slate-500 mt-0.5">세후 단리 이자: +5,200만 원</div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-5 rounded-2xl shadow-md">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-blue-100">복리 만기 수령액 (세후 명목금액)</span>
+                                <span id="t1_out_badge" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/20 text-white">단리 대비 +3,400만</span>
+                            </div>
+                            <div id="t1_out_compound" class="text-2xl sm:text-3xl font-extrabold mt-1">1억 8,600만 원</div>
+                            <div id="t1_out_compound_sub" class="text-xs text-blue-100 mt-0.5">세후 복리 수익: +8,600만 원</div>
+                        </div>
+
+                        <div class="bg-amber-50/90 dark:bg-amber-950/30 p-5 rounded-2xl border border-amber-200 dark:border-amber-800/60 shadow-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-semibold text-amber-800 dark:text-amber-300">물가 반영 실질 구매력 (현재 가치)</span>
+                                <i class="fa-solid fa-basket-shopping text-amber-600 dark:text-amber-400 text-sm"></i>
+                            </div>
+                            <div id="t1_out_real" class="text-xl sm:text-2xl font-extrabold text-amber-900 dark:text-amber-200 mt-1">1억 2,800만 원</div>
+                            <div id="t1_out_real_sub" class="text-xs text-amber-700 dark:text-amber-400 mt-0.5">인플레이션 차감 후 현재 체감 가치</div>
                         </div>
                     </div>
 
-                    <!-- 생성된 게임 세트 리스트 컨테이너 -->
-                    <div id="lotto-results-container" class="space-y-3.5">
-                        <!-- JS를 통해 로또 게임 Row들이 렌더링됩니다 -->
+                    <!-- Chart Container -->
+                    <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                                <i class="fa-solid fa-chart-line text-blue-600 mr-1.5"></i>연도별 자산 성장 추이 (원금 vs 단리 vs 복리 vs 실질가치)
+                            </h4>
+                            <span id="t1_rule72_badge" class="text-xs font-medium px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                72법칙: 원금 2배 소요 기간 약 10.3년
+                            </span>
+                        </div>
+                        <div class="h-72 sm:h-80 w-full">
+                            <canvas id="chartTab1"></canvas>
+                        </div>
                     </div>
 
-                    <!-- 번호 색상 범례 & 조합 팁 -->
-                    <div class="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-                        <div class="flex flex-wrap items-center gap-3">
-                            <span class="font-bold text-slate-700 dark:text-slate-300">동행복권 공식 색상:</span>
-                            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#fbc400] inline-block"></span>1~10 노랑</span>
-                            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#69c8f2] inline-block"></span>11~20 파랑</span>
-                            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#ff7272] inline-block"></span>21~30 빨강</span>
-                            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#888888] inline-block"></span>31~40 회색</span>
-                            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-[#b0d840] inline-block"></span>41~45 초록</span>
+                    <!-- Collapsible Yearly Table -->
+                    <details class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden group">
+                        <summary class="px-6 py-4 cursor-pointer font-bold text-sm text-slate-800 dark:text-slate-200 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/50 transition">
+                            <span><i class="fa-solid fa-table mr-2 text-blue-600"></i>연도별 단리·복리·실질가치 상세 비교표 펼쳐보기</span>
+                            <i class="fa-solid fa-chevron-down text-xs text-slate-400 group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <div class="overflow-x-auto max-h-80 border-t border-slate-100 dark:border-slate-800">
+                            <table class="w-full text-xs sm:text-sm text-right">
+                                <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 sticky top-0">
+                                    <tr>
+                                        <th class="py-3 px-4 text-left">경과 연수</th>
+                                        <th class="py-3 px-4">누적 원금</th>
+                                        <th class="py-3 px-4">단리 (세후)</th>
+                                        <th class="py-3 px-4 text-blue-600 dark:text-blue-400">복리 (세후)</th>
+                                        <th class="py-3 px-4 text-amber-600 dark:text-amber-400">실질 구매력</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="t1_table_body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="text-[11px] text-slate-400">
-                            💡 6개 번호 총합이 <strong class="text-slate-600 dark:text-slate-300">100 ~ 175 구간</strong>일 때 통계적으로 가장 균형 잡힌 조합입니다.
-                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 2: 예금(거치식) vs 적금(적립식) 실효수익률 비교
+             ========================================== -->
+        <section id="tab2" class="tab-panel hidden space-y-6">
+            <!-- Concept Explanation Banner -->
+            <div class="bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/60 rounded-2xl p-5 sm:p-6">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid fa-scale-unbalanced"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                            💡 핵심 개념 설명: 왜 같은 연 4% 금리인데 적금 이자는 예금의 절반밖에 안 될까요?
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            • <strong>정기예금(거치식):</strong> 1,200만 원을 첫날 한꺼번에 넣어 12개월 내내 온전히 연 4% 이자를 받습니다. (세전 이자 48만 원)<br>
+                            • <strong>정기적금(적립식):</strong> 매달 100만 원씩 나눠 넣기 때문에 첫 달 넣은 돈만 12개월 치 이자를 받고, 둘째 달 돈은 11개월 치, <strong>마지막 12번째 달에 넣은 돈은 단 1개월 치(1/12) 이자</strong>만 받습니다.<br>
+                            • <strong>실전 팁:</strong> 1년 만기 적금의 실제 평균 예치 기간은 약 6.5개월(13/24 ≈ 54.17%)입니다. 따라서 <strong>연 4% 예금과 똑같은 이자를 받으려면 적금 금리는 약 연 7.38%</strong>여야 합니다. 목돈이 이미 있다면 적금보다 예금(또는 파킹통장+예금 조합)이 훨씬 유리합니다.
+                        </p>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- 4. 최근 추첨 기록 (Draw History) 섹션 -->
-            <section class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 sm:p-8">
-                <div class="flex items-center justify-between gap-4 mb-6">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i class="fa-solid fa-clock-rotate-left text-indigo-600 dark:text-indigo-400"></i>
-                            <span>최근 추첨 기록</span>
-                            <span id="history-count-badge" class="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">0</span>
-                        </h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                            방금 추첨한 번호 조합이 시간순으로 자동 보관됩니다 (최대 15건).
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Inputs -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
+                    <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <i class="fa-solid fa-calculator text-emerald-600"></i> 예금 vs 적금 비교 조건
+                    </h4>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">총 납입 원금 기준액</label>
+                            <span id="t2_total_kr" class="text-emerald-600 dark:text-emerald-400 font-bold">1,200만 원</span>
+                        </div>
+                        <input type="number" id="t2_total" value="12000000" step="1200000" min="100000" oninput="calcTab2()"
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                        <p id="t2_monthly_equiv" class="text-xs text-slate-500">
+                            • 예금: 첫날 1,200만 원 일시 예치 / 적금: 매월 100만 원씩 12회 납입
                         </p>
                     </div>
 
-                    <button type="button" onclick="clearHistory()"
-                        class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/50 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-300 text-xs font-bold transition-colors">
-                        <i class="fa-regular fa-trash-can"></i>
-                        <span>기록 초기화</span>
-                    </button>
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">표시 연 금리 (%)</label>
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400"><span id="t2_rate_val">4.0</span>%</span>
+                        </div>
+                        <input type="range" id="t2_rate" min="1" max="10" step="0.1" value="4.0" oninput="calcTab2()" class="w-full">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">가입 기간</label>
+                            <select id="t2_months" onchange="calcTab2()" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-medium outline-none">
+                                <option value="6">6개월</option>
+                                <option value="12" selected>12개월 (1년)</option>
+                                <option value="24">24개월 (2년)</option>
+                                <option value="36">36개월 (3년)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">과세 구분</label>
+                            <select id="t2_tax" onchange="calcTab2()" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-medium outline-none">
+                                <option value="0.154">일반과세 (15.4%)</option>
+                                <option value="0.095">세금우대 (9.5%)</option>
+                                <option value="0">비과세 (0%)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Equivalent Rate Highlight Box -->
+                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
+                        <div class="text-xs font-bold text-slate-500 dark:text-slate-400">📌 손익분기 금리 환산</div>
+                        <p id="t2_equiv_notice" class="text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium leading-relaxed">
+                            연 4.0% 정기예금과 동일한 이자를 받으려면, 정기적금 금리는 최소 <strong class="text-emerald-600 dark:text-emerald-400">연 7.38%</strong> 이상이어야 합니다.
+                        </p>
+                    </div>
                 </div>
 
-                <!-- 히스토리 리스트 -->
-                <div id="history-list" class="space-y-3">
-                    <!-- JS에서 렌더링 -->
-                </div>
-            </section>
+                <!-- Outputs & Chart -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- 정기예금 카드 -->
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-blue-500/40 shadow-sm space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">정기예금 (목돈 일시 예치)</span>
+                                <span id="t2_dep_yield" class="text-xs font-bold text-blue-600 dark:text-blue-400">원금 대비 +3.38%</span>
+                            </div>
+                            <div class="pt-1">
+                                <div class="text-xs text-slate-400">세후 실수령 이자</div>
+                                <div id="t2_dep_interest" class="text-2xl font-extrabold text-slate-900 dark:text-white">40만 6,080원</div>
+                            </div>
+                            <div id="t2_dep_total" class="text-xs text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800">
+                                만기 총 수령액: 1,240만 6,080원
+                            </div>
+                        </div>
 
-            <!-- 5. 제휴 및 비즈니스 문의 (Formspree) 섹션 -->
-            <section id="partnership-section" class="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-sm p-6 sm:p-8">
-                <div class="mb-6">
-                    <h2 class="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                        <i class="fa-solid fa-handshake text-indigo-600 dark:text-indigo-400"></i>
-                        <span>제휴 및 광고 문의</span>
-                    </h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                        비즈니스 제휴, 광고 배너 게재, 서비스 협업 문의사항을 남겨주시면 빠르게 회신드리겠습니다.
+                        <!-- 정기적금 카드 -->
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border-2 border-emerald-500/40 shadow-sm space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">정기적금 (매월 분할 납입)</span>
+                                <span id="t2_sav_yield" class="text-xs font-bold text-emerald-600 dark:text-emerald-400">원금 대비 +1.83%</span>
+                            </div>
+                            <div class="pt-1">
+                                <div class="text-xs text-slate-400">세후 실수령 이자</div>
+                                <div id="t2_sav_interest" class="text-2xl font-extrabold text-slate-900 dark:text-white">21만 9,960원</div>
+                            </div>
+                            <div id="t2_sav_total" class="text-xs text-slate-500 pt-1 border-t border-slate-100 dark:border-slate-800">
+                                만기 총 수령액: 1,221만 9,960원
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                                <i class="fa-solid fa-chart-column text-emerald-600 mr-1.5"></i>예금 vs 적금 세전·세후 이자 수령액 비교
+                            </h4>
+                            <span id="t2_diff_badge" class="text-xs font-bold text-blue-600 dark:text-blue-400">
+                                예금이 적금보다 세후 18만 6,120원 더 수령
+                            </span>
+                        </div>
+                        <div class="h-64 sm:h-72 w-full">
+                            <canvas id="chartTab2"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 3: 배당 재투자(스노우볼) 시뮬레이터
+             ========================================== -->
+        <section id="tab3" class="tab-panel hidden space-y-6">
+            <!-- Concept Explanation Banner -->
+            <div class="bg-indigo-50/80 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900/60 rounded-2xl p-5 sm:p-6">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                            💡 핵심 개념 설명: 배당 재투자(DRIP) 스노우볼 효과란?
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            • <strong>배당금 현금 소비(미재투자):</strong> 매년 나오는 배당금을 인출해 써버리면 보유 주식 수가 늘어나지 않아 주가 상승분만큼만 자산이 성장합니다.<br>
+                            • <strong>배당금 재투자(DRIP):</strong> 받은 배당금으로 <strong>같은 배당주를 추가로 매수</strong>하면 보유 주식 수 자체가 늘어납니다. 늘어난 주식에서 다음 해에 더 많은 배당금이 나오고, 여기에 기업의 <strong>배당 성장률</strong>까지 더해지면 <strong>'주식 수 증가 × 주당 배당금 증가'</strong>의 이중 복리 스노우볼이 굴러갑니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Inputs -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+                    <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <i class="fa-solid fa-coins text-indigo-600"></i> 배당 투자 시뮬레이션 설정
+                    </h4>
+
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">초기 배당주 투자금</label>
+                            <span id="t3_init_kr" class="text-indigo-600 dark:text-indigo-400 font-bold">2,000만 원</span>
+                        </div>
+                        <input type="number" id="t3_initial" value="20000000" step="1000000" min="0" oninput="calcTab3()"
+                            class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold outline-none">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">매월 추가 적립 매수금</label>
+                            <span id="t3_monthly_kr" class="text-indigo-600 dark:text-indigo-400 font-bold">50만 원</span>
+                        </div>
+                        <input type="number" id="t3_monthly" value="500000" step="100000" min="0" oninput="calcTab3()"
+                            class="w-full px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold outline-none">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">연 배당수익률 (시가배당률)</label>
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400"><span id="t3_div_val">4.5</span>%</span>
+                        </div>
+                        <input type="range" id="t3_div_yield" min="1" max="12" step="0.5" value="4.5" oninput="calcTab3()" class="w-full">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">연평균 주가·배당 성장률</label>
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400"><span id="t3_growth_val">5.0</span>%</span>
+                        </div>
+                        <input type="range" id="t3_growth" min="0" max="15" step="0.5" value="5.0" oninput="calcTab3()" class="w-full">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">투자 기간</label>
+                            <span class="font-bold text-indigo-600 dark:text-indigo-400"><span id="t3_years_val">15</span>년</span>
+                        </div>
+                        <input type="range" id="t3_years" min="1" max="35" step="1" value="15" oninput="calcTab3()" class="w-full">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">계좌 과세 환경</label>
+                        <select id="t3_tax" onchange="calcTab3()" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-medium outline-none">
+                            <option value="0.154">일반 주식계좌 (배당소득세 15.4% 차감 후 재투자)</option>
+                            <option value="0">ISA / 연금저축·IRP (비과세·과세이연 100% 재투자)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Outputs & Chart -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-br from-indigo-600 to-blue-700 text-white p-5 rounded-2xl shadow-md space-y-1.5">
+                            <span class="text-xs font-semibold text-indigo-100">배당 재투자(DRIP) 시 최종 평가자산</span>
+                            <div id="t3_out_drip_asset" class="text-2xl sm:text-3xl font-extrabold">3억 1,200만 원</div>
+                            <div id="t3_out_drip_monthly_div" class="text-xs sm:text-sm font-semibold text-emerald-300 pt-1">
+                                최종 예상 월 배당금: 약 105만 원 / 월
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-1.5">
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">배당금 현금 사용(미재투자) 시 자산</span>
+                            <div id="t3_out_nodrip_asset" class="text-2xl font-extrabold text-slate-800 dark:text-slate-100">1억 9,800만 원</div>
+                            <div id="t3_out_nodrip_monthly_div" class="text-xs text-slate-500 pt-1">
+                                최종 예상 월 배당금: 약 62만 원 / 월
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                                <i class="fa-solid fa-snowflake text-indigo-600 mr-1.5"></i>배당 재투자 유무에 따른 자산 & 연 배당금 성장 비교
+                            </h4>
+                            <span id="t3_snowball_diff" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                                재투자 스노우볼 효과: +1억 1,400만 원
+                            </span>
+                        </div>
+                        <div class="h-72 sm:h-80 w-full">
+                            <canvas id="chartTab3"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 4: 목표 금액 역산(Reverse) 계산기
+             ========================================== -->
+        <section id="tab4" class="tab-panel hidden space-y-6">
+            <!-- Concept Explanation Banner -->
+            <div class="bg-purple-50/80 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-900/60 rounded-2xl p-5 sm:p-6">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                            💡 핵심 개념 설명: 목표 금액 역산(Reverse Planning)이란?
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            • 막연하게 남는 돈을 저축하기보다 <strong>"5년 뒤 1억 원 만들기"</strong>처럼 목표 금액과 기간을 먼저 정한 뒤, 이를 달성하기 위해 <strong>매달 얼마씩 적립해야 하는지 역으로 계산</strong>하는 재무 설계 방식입니다.<br>
+                            • 현재 보유한 시드머니가 복리로 불어나는 미래 가치를 먼저 차감하고, 남은 부족분을 달성하기 위한 월 적립금을 산출하므로 현실적인 저축 계획을 세울 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Inputs -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-5">
+                    <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <i class="fa-solid fa-flag-checkered text-purple-600"></i> 나의 목표 조건 설정
+                    </h4>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">목표 자산 금액</label>
+                            <span id="t4_goal_kr" class="text-purple-600 dark:text-purple-400 font-bold">1억 원</span>
+                        </div>
+                        <input type="number" id="t4_goal" value="100000000" step="10000000" min="1000000" oninput="calcTab4()"
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold outline-none">
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="setAmount('t4_goal', 50000000, calcTab4)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 font-medium">5,000만</button>
+                            <button onclick="setAmount('t4_goal', 100000000, calcTab4)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 font-medium">1억</button>
+                            <button onclick="setAmount('t4_goal', 300000000, calcTab4)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 font-medium">3억</button>
+                            <button onclick="setAmount('t4_goal', 500000000, calcTab4)" class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 font-medium">5억</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">현재 보유 시드머니</label>
+                            <span id="t4_seed_kr" class="text-purple-600 dark:text-purple-400 font-bold">1,000만 원</span>
+                        </div>
+                        <input type="number" id="t4_seed" value="10000000" step="5000000" min="0" oninput="calcTab4()"
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold outline-none">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">목표 달성 기간 (년)</label>
+                            <span class="font-bold text-purple-600 dark:text-purple-400"><span id="t4_years_val">5</span>년</span>
+                        </div>
+                        <input type="range" id="t4_years" min="1" max="30" step="1" value="5" oninput="calcTab4()" class="w-full">
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">예상 연 수익률 (세후 기준 %)</label>
+                            <span class="font-bold text-purple-600 dark:text-purple-400"><span id="t4_rate_val">6.0</span>%</span>
+                        </div>
+                        <input type="range" id="t4_rate" min="1" max="15" step="0.5" value="6.0" oninput="calcTab4()" class="w-full">
+                    </div>
+                </div>
+
+                <!-- Outputs & Chart -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-gradient-to-r from-purple-600 to-indigo-700 text-white p-6 rounded-2xl shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="space-y-1">
+                            <span class="text-xs font-semibold text-purple-200">목표 달성을 위해 매월 적립해야 할 금액 (복리 기준)</span>
+                            <div id="t4_out_monthly" class="text-3xl sm:text-4xl font-extrabold">123만 8,500원</div>
+                            <p id="t4_out_simple_compare" class="text-xs text-purple-100">
+                                ※ 이자 없이 단순 저축만 할 경우 매월 150만 원 필요
+                            </p>
+                        </div>
+                        <div class="bg-white/15 backdrop-blur-sm px-4 py-3 rounded-xl border border-white/20 text-right shrink-0">
+                            <div class="text-xs text-purple-100">이자·투자수익 기여도</div>
+                            <div id="t4_out_profit_ratio" class="text-2xl font-extrabold text-amber-300">16.8%</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                                <i class="fa-solid fa-chart-pie text-purple-600 mr-1.5"></i>목표 자산 구성 비율
+                            </h4>
+                            <div class="space-y-2.5 text-sm">
+                                <div class="flex justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <span class="text-slate-600 dark:text-slate-300">① 초기 시드머니 원금</span>
+                                    <strong id="t4_bd_seed" class="text-slate-900 dark:text-white">1,000만 원</strong>
+                                </div>
+                                <div class="flex justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <span class="text-slate-600 dark:text-slate-300">② 월 적립 원금 합계</span>
+                                    <strong id="t4_bd_contrib" class="text-blue-600 dark:text-blue-400">7,320만 원</strong>
+                                </div>
+                                <div class="flex justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60">
+                                    <span class="text-slate-600 dark:text-slate-300">③ 복리 이자·수익 합계</span>
+                                    <strong id="t4_bd_interest" class="text-emerald-600 dark:text-emerald-400">1,680만 원</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-60 w-full flex items-center justify-center">
+                            <canvas id="chartTab4"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 5: 대출 상환 vs 복리 투자 손익분기점
+             ========================================== -->
+        <section id="tab5" class="tab-panel hidden space-y-6">
+            <!-- Concept Explanation Banner -->
+            <div class="bg-rose-50/80 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 rounded-2xl p-5 sm:p-6">
+                <div class="flex items-start gap-3.5">
+                    <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                            💡 핵심 개념 설명: 여유 자금으로 '대출을 갚을까' vs '투자를 할까'?
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            • <strong>대출 원금 상환의 숨은 가치:</strong> 연 5.0% 대출 원금을 갚으면 앞으로 내야 할 5.0% 이자가 100% 확실하게 사라집니다. 대출 이자 절감에는 세금이 붙지 않으므로 <strong>세후 5.0% 확정 수익 상품</strong>에 가입한 것과 같습니다.<br>
+                            • <strong>손익분기 투자수익률:</strong> 일반 과세(15.4%) 계좌에서 투자로 세후 5.0%를 넘기려면 <strong>세전 최소 5.91% 이상(5.0% ÷ 0.846)</strong>의 수익률을 매년 올려야 합니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Inputs -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+                    <h4 class="font-bold text-slate-900 dark:text-white flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <i class="fa-solid fa-sliders text-rose-600"></i> 대출 vs 투자 비교 조건
+                    </h4>
+
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">활용 가능 여유 자금</label>
+                            <span id="t5_amount_kr" class="text-rose-600 dark:text-rose-400 font-bold">3,000만 원</span>
+                        </div>
+                        <input type="number" id="t5_amount" value="30000000" step="5000000" min="1000000" oninput="calcTab5()"
+                            class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold outline-none">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">현재 대출 금리 (연 %)</label>
+                            <span class="font-bold text-rose-600 dark:text-rose-400"><span id="t5_loan_val">5.2</span>%</span>
+                        </div>
+                        <input type="range" id="t5_loan_rate" min="2" max="12" step="0.1" value="5.2" oninput="calcTab5()" class="w-full">
+                    </div>
+
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-sm">
+                            <label class="font-semibold text-slate-700 dark:text-slate-300">예상 투자 수익률 (세전 연 %)</label>
+                            <span class="font-bold text-blue-600 dark:text-blue-400"><span id="t5_inv_val">6.0</span>%</span>
+                        </div>
+                        <input type="range" id="t5_inv_rate" min="1" max="15" step="0.1" value="6.0" oninput="calcTab5()" class="w-full">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">비교 기간</label>
+                            <select id="t5_years" onchange="calcTab5()" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-medium outline-none">
+                                <option value="1">1년</option>
+                                <option value="3" selected>3년</option>
+                                <option value="5">5년</option>
+                                <option value="10">10년</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">투자 과세율</label>
+                            <select id="t5_tax" onchange="calcTab5()" class="w-full px-3 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-medium outline-none">
+                                <option value="0.154">일반과세 (15.4%)</option>
+                                <option value="0.095">세금우대 (9.5%)</option>
+                                <option value="0">비과세 (0%)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        <div class="text-xs font-bold text-slate-500 dark:text-slate-400">🎯 세전 손익분기 투자수익률</div>
+                        <p id="t5_breakeven_text" class="text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-200 mt-1">
+                            대출금리 5.2%를 이기려면 세전 최소 <strong class="text-rose-600 dark:text-rose-400">연 6.15%</strong> 이상의 투자 수익률이 필요합니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Outputs & Chart -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Verdict Banner -->
+                    <div id="t5_verdict_card" class="p-6 rounded-2xl text-white shadow-md bg-gradient-to-r from-rose-600 to-orange-600">
+                        <div class="text-xs font-bold uppercase tracking-wider opacity-90">시뮬레이션 판정 결과</div>
+                        <div id="t5_verdict_title" class="text-xl sm:text-2xl font-extrabold mt-1">
+                            대출 원금 상환이 35만 4,000원 더 유리합니다!
+                        </div>
+                        <p id="t5_verdict_desc" class="text-xs sm:text-sm opacity-90 mt-1">
+                            세금을 제외하면 확정적인 대출 이자 절감액이 기대 투자 수익보다 높습니다.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <span class="text-xs font-semibold text-rose-600 dark:text-rose-400">① 대출 상환 시 아끼는 확정 이자</span>
+                            <div id="t5_out_loan_saved" class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">492만 원</div>
+                            <div class="text-xs text-slate-500 mt-0.5">무위험 100% 확정 비용 절감 효과</div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">② 복리 투자 시 세후 순수익</span>
+                            <div id="t5_out_inv_profit" class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">485만 원</div>
+                            <div id="t5_out_inv_sub" class="text-xs text-slate-500 mt-0.5">세전 수익에서 세금 차감 후 순이익</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base mb-4">
+                            <i class="fa-solid fa-chart-bar text-rose-600 mr-1.5"></i>대출 상환 이자 절감액 vs 투자 세후 순수익 비교
+                        </h4>
+                        <div class="h-60 w-full">
+                            <canvas id="chartTab5"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             핵심 금융 상식 & 공식 가이드 (Educational Glossary)
+             ========================================== -->
+        <section id="glossary-section" class="pt-6 border-t border-slate-200 dark:border-slate-800 space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                    <h3 class="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-blue-600"></i> 알아두면 평생 돈이 되는 필수 금융 상식 4가지
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                        계산기 결과를 200% 활용하기 위해 꼭 알아야 할 핵심 금융 공식과 원리입니다.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+                        72
+                    </div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm">1. 72의 법칙 (Rule of 72)</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        복리로 내 원금이 <strong>2배가 되는 데 걸리는 시간</strong>을 암산하는 공식입니다. <strong>72 ÷ 연수익률(%)</strong>로 계산합니다. 예를 들어 연 6% 복리라면 <code>72 ÷ 6 = 약 12년</code> 만에 원금이 2배가 됩니다.
                     </p>
                 </div>
 
-                <form id="partnership-form" action="https://formspree.io/f/xbgogpoq" method="POST" onsubmit="handlePartnershipSubmit(event)" class="space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="partner-name" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                                성함 / 업체명 <span class="text-rose-500">*</span>
-                            </label>
-                            <input type="text" id="partner-name" name="name" required placeholder="홍길동 / (주)행운파트너스"
-                                class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                        </div>
-
-                        <div>
-                            <label for="partner-email" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                                회신받을 이메일 <span class="text-rose-500">*</span>
-                            </label>
-                            <input type="email" id="partner-email" name="email" required placeholder="partner@example.com"
-                                class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                        </div>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                        %
                     </div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm">2. 명목금리 vs 실질금리</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        은행이 표시하는 금리는 <strong>명목금리</strong>입니다. 실제로 내 자산의 구매력이 늘어나는 속도는 <strong>실질금리 ≈ 세후금리 - 물가상승률</strong>입니다. 세후 금리가 물가상승률보다 낮으면 사실상 마이너스입니다.
+                    </p>
+                </div>
 
-                    <div>
-                        <label for="partner-message" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                            제휴 문의 내용 <span class="text-rose-500">*</span>
-                        </label>
-                        <textarea id="partner-message" name="message" rows="3" required placeholder="제휴 제안 내용이나 연락처를 간단히 적어주세요."
-                            class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-y"></textarea>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                    <div class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-vault"></i>
                     </div>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm">3. 과세이연의 복리 가속 효과</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        ISA나 연금저축 계좌처럼 매년 15.4% 세금을 즉시 떼지 않고 만기까지 미뤄주는 것을 <strong>과세이연</strong>이라고 합니다. 세금으로 빠져나갈 돈까지 원금에 남아 함께 복리로 굴러가므로 장기 수익률이 크게 높아집니다.
+                    </p>
+                </div>
 
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-                        <p id="partnership-status" class="text-xs text-slate-500 dark:text-slate-400">
-                            <i class="fa-solid fa-lock text-slate-400 mr-1"></i>입력하신 정보는 제휴 문의 응대 목적으로만 안전하게 전송됩니다.
-                        </p>
-                        <button type="submit" id="partnership-submit-btn"
-                            class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-indigo-500/20 active:scale-95 transition-all cursor-pointer">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            <span>제휴 문의 보내기</span>
-                        </button>
+                <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-2">
+                    <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-hourglass-half"></i>
                     </div>
-                </form>
-            </section>
+                    <h4 class="font-bold text-slate-900 dark:text-white text-sm">4. 풍차돌리기 & 예적금 조합</h4>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        매달 월급으로 적금을 부어 목돈을 만든 뒤, 만기된 목돈은 곧바로 <strong>정기예금(거치식)</strong>으로 옮겨 묶어두면 적금으로 모으는 습관과 예금의 높은 실효수익률을 동시에 챙길 수 있습니다.
+                    </p>
+                </div>
+            </div>
+        </section>
 
-        </div>
     </main>
 
-    <!-- 푸터 -->
-    <footer class="py-6 bg-white dark:bg-slate-950 border-t border-slate-200/80 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
-        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <p>© 2026 <strong>Lotto 6/45 Smart Generator</strong>. 본 서비스의 추첨 번호는 무작위 확률에 기반하며 당첨을 보장하지 않습니다.</p>
-            <p class="font-mono text-[11px]">Korean Lotto 6/45 Official Color Standard</p>
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+            <div>
+                <strong>FinSmart 실질 금융 시뮬레이터</strong> — 단리·복리·물가·예적금·배당·대출 통합 가이드
+            </div>
+            <div>
+                ※ 본 계산기의 결과는 이해를 돕기 위한 시뮬레이션 추정치이며, 실제 금융상품의 일수 계산 및 약관에 따라 소폭 차이가 있을 수 있습니다.
+            </div>
         </div>
     </footer>
 
-    <!-- 커스텀 토스트 메시지 (alert 대체) -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300">
-        <div class="flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-slate-900 dark:bg-indigo-500 text-white font-bold text-xs sm:text-sm shadow-2xl">
-            <i id="toast-icon" class="fa-solid fa-circle-check text-emerald-400 dark:text-white text-base"></i>
-            <span id="toast-message">알림 메시지</span>
-        </div>
-    </div>
-
-    <!-- 메인 애플리케이션 스크립트 -->
+    <!-- JavaScript Calculation & Chart Logic -->
     <script>
-        // --- 상태 변수 ---
-        let gameCount = 5; // 기본 5게임 (1장)
-        let filterMode = 'fixed'; // 'fixed' (고정수) | 'excluded' (제외수)
-        const fixedNumbers = new Set(); // 최대 5개
-        const excludedNumbers = new Set(); // 최대 35개
-        let currentGeneratedSets = []; // 현재 화면에 표시된 추첨 결과 배열
-        let drawHistory = []; // 최근 추첨 기록 (최대 15개)
-        let soundEnabled = true; // Web Audio API 효과음 여부
-        let audioCtx = null;
+        // Chart instances
+        let chart1 = null, chart2 = null, chart3 = null, chart4 = null, chart5 = null;
 
-        const GAME_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+        // Format number into Korean unit string (e.g., 1억 2,345만 원)
+        function formatKoreanWon(num) {
+            const n = Math.round(num);
+            if (n === 0) return '0원';
+            const isNeg = n < 0;
+            let abs = Math.abs(n);
 
-        // --- 초기화 ---
-        window.addEventListener('DOMContentLoaded', () => {
-            initTheme();
-            renderNumberPickerGrid();
-            loadHistoryFromStorage();
-            generateLottoGames(false); // 첫 진입 시 기본 추첨
-        });
+            const eok = Math.floor(abs / 100000000);
+            const man = Math.floor((abs % 100000000) / 10000);
+            const rest = abs % 10000;
 
-        // --- 1. 번호별 동행복권 공식 색상 클래스 반환 ---
-        function getBallColorClass(num) {
-            if (num <= 10) return 'ball-yellow';
-            if (num <= 20) return 'ball-blue';
-            if (num <= 30) return 'ball-red';
-            if (num <= 40) return 'ball-gray';
-            return 'ball-green';
+            let parts = [];
+            if (eok > 0) parts.push(`${eok.toLocaleString('ko-KR')}억`);
+            if (man > 0) parts.push(`${man.toLocaleString('ko-KR')}만`);
+            if (eok === 0 && rest > 0) parts.push(`${rest.toLocaleString('ko-KR')}`);
+
+            return (isNeg ? '-' : '') + parts.join(' ') + '원';
         }
 
-        // --- 2. Web Audio API 기반 경쾌한 팝 사운드 ---
-        function playPopSound(index = 0) {
-            if (!soundEnabled) return;
-            try {
-                if (!audioCtx) {
-                    const AudioContext = window.AudioContext || window.webkitAudioContext;
-                    audioCtx = new AudioContext();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                // 공이 순서대로 나올 때 살짝씩 높아지는 도레미 톤
-                const baseFreq = 360 + (index * 45);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(baseFreq * 1.4, audioCtx.currentTime + 0.065);
-
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.075);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.08);
-            } catch (e) {
-                // 오디오 컨텍스트 제한 시 무시
-            }
+        function formatExactWon(num) {
+            return Math.round(num).toLocaleString('ko-KR') + '원';
         }
 
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            const icon = document.getElementById('sound-icon');
-            const label = document.getElementById('sound-label');
-            if (soundEnabled) {
-                icon.className = 'fa-solid fa-volume-high text-indigo-600 dark:text-indigo-400';
-                label.textContent = '효과음 ON';
-                playPopSound(2);
-                showToast('추첨 효과음이 켜졌습니다.');
-            } else {
-                icon.className = 'fa-solid fa-volume-xmark text-slate-400';
-                label.textContent = '효과음 OFF';
-                showToast('추첨 효과음이 꺼졌습니다.');
-            }
+        // Quick amount helpers
+        function addAmount(inputId, delta, callback) {
+            const el = document.getElementById(inputId);
+            const current = parseFloat(el.value) || 0;
+            el.value = Math.max(0, current + delta);
+            callback();
         }
 
-        // --- 3. 고정수 / 제외수 그리드 렌더링 및 제어 ---
-        function renderNumberPickerGrid() {
-            const grid = document.getElementById('number-picker-grid');
-            grid.innerHTML = '';
-
-            for (let n = 1; n <= 45; n++) {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.id = `picker-num-${n}`;
-                btn.onclick = () => toggleNumberFilter(n);
-                btn.className = getPickerButtonClass(n);
-                btn.textContent = n;
-                grid.appendChild(btn);
-            }
-            updateFilterStatusUI();
+        function setAmount(inputId, val, callback) {
+            document.getElementById(inputId).value = val;
+            callback();
         }
 
-        function getPickerButtonClass(n) {
-            const base = 'h-9 rounded-xl font-mono text-xs font-extrabold transition-all flex items-center justify-center border select-none ';
-            if (fixedNumbers.has(n)) {
-                return base + 'bg-indigo-600 text-white border-indigo-700 ring-2 ring-indigo-400 shadow-sm scale-105';
-            }
-            if (excludedNumbers.has(n)) {
-                return base + 'bg-rose-100 dark:bg-rose-950/70 text-rose-500 border-rose-300 dark:border-rose-800 line-through opacity-60';
-            }
-            return base + 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-indigo-400';
+        // Dark mode toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon';
+            updateAllCharts();
         }
 
-        function setFilterMode(mode) {
-            filterMode = mode;
-            const fixedBtn = document.getElementById('mode-fixed-btn');
-            const excludedBtn = document.getElementById('mode-excluded-btn');
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
 
-            if (mode === 'fixed') {
-                fixedBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white shadow-sm transition-all';
-                excludedBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all';
-            } else {
-                excludedBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-600 text-white shadow-sm transition-all';
-                fixedBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all';
-            }
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+            document.getElementById('btn-' + tabId).classList.add('tab-active');
+
+            updateAllCharts();
         }
 
-        function toggleNumberFilter(n) {
-            if (filterMode === 'fixed') {
-                if (fixedNumbers.has(n)) {
-                    fixedNumbers.delete(n);
-                } else {
-                    if (fixedNumbers.size >= 5) {
-                        showToast('고정수는 최대 5개까지 선택할 수 있습니다.', 'warning');
-                        return;
-                    }
-                    excludedNumbers.delete(n);
-                    fixedNumbers.add(n);
-                }
-            } else {
-                if (excludedNumbers.has(n)) {
-                    excludedNumbers.delete(n);
-                } else {
-                    if (excludedNumbers.size >= 35) {
-                        showToast('제외수는 최대 35개까지만 설정할 수 있습니다.', 'warning');
-                        return;
-                    }
-                    fixedNumbers.delete(n);
-                    excludedNumbers.add(n);
-                }
-            }
-            const btn = document.getElementById(`picker-num-${n}`);
-            if (btn) btn.className = getPickerButtonClass(n);
-            updateFilterStatusUI();
-        }
-
-        function resetFilters() {
-            fixedNumbers.clear();
-            excludedNumbers.clear();
-            renderNumberPickerGrid();
-            showToast('고정수 및 제외수 필터가 초기화되었습니다.');
-        }
-
-        function updateFilterStatusUI() {
-            document.getElementById('fixed-count').textContent = fixedNumbers.size;
-            document.getElementById('excluded-count').textContent = excludedNumbers.size;
-
-            const totalActive = fixedNumbers.size + excludedNumbers.size;
-            document.getElementById('filter-badge').textContent = totalActive;
-
-            const sortedFixed = Array.from(fixedNumbers).sort((a, b) => a - b);
-            const sortedExcluded = Array.from(excludedNumbers).sort((a, b) => a - b);
-
-            document.getElementById('fixed-list-text').textContent =
-                sortedFixed.length > 0 ? sortedFixed.join(', ') : '없음 (완전 자동)';
-            document.getElementById('excluded-list-text').textContent =
-                sortedExcluded.length > 0 ? sortedExcluded.join(', ') : '없음';
-        }
-
-        function toggleFilterPanel() {
-            const panel = document.getElementById('filter-panel');
-            const chevron = document.getElementById('filter-chevron');
-            panel.classList.toggle('hidden');
-            chevron.classList.toggle('rotate-180');
-        }
-
-        // --- 4. 게임 세트 수 변경 (1게임 / 3게임 / 5게임 / 10게임) ---
-        function setGameCount(count) {
-            gameCount = count;
-            [1, 3, 5, 10].forEach(c => {
-                const btn = document.getElementById(`count-btn-${c}`);
-                if (c === count) {
-                    btn.className = 'game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-slate-900 shadow-sm';
-                } else {
-                    btn.className = 'game-count-btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-slate-200 hover:text-white';
-                }
-            });
-            generateLottoGames();
-        }
-
-        // --- 5. 로또 6/45 핵심 번호 추첨 알고리즘 ---
-        function drawSingleLottoSet(includeBonus) {
-            // 1) 사용 가능한 번호 풀 생성 (제외수 및 이미 선택된 고정수 제외)
-            const availablePool = [];
-            for (let i = 1; i <= 45; i++) {
-                if (!excludedNumbers.has(i) && !fixedNumbers.has(i)) {
-                    availablePool.push(i);
-                }
-            }
-
-            // Fisher-Yates 셔플로 공정한 무작위 섞기
-            for (let i = availablePool.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [availablePool[i], availablePool[j]] = [availablePool[j], availablePool[i]];
-            }
-
-            // 2) 고정수 + 부족한 개수만큼 추출하여 6개 완성
-            const mainNumbers = Array.from(fixedNumbers);
-            const needed = 6 - mainNumbers.length;
-            for (let i = 0; i < needed; i++) {
-                mainNumbers.push(availablePool[i]);
-            }
-            mainNumbers.sort((a, b) => a - b);
-
-            // 3) 보너스 번호 1개 추출
-            const bonusNumber = includeBonus ? availablePool[needed] : null;
-
-            // 4) 조합 통계 계산 (총합, 홀/짝, 고/저)
-            const sum = mainNumbers.reduce((acc, cur) => acc + cur, 0);
-            const oddCount = mainNumbers.filter(n => n % 2 !== 0).length;
-            const evenCount = 6 - oddCount;
-            const highCount = mainNumbers.filter(n => n >= 23).length;
-            const lowCount = 6 - highCount;
-
+        function getChartColors() {
+            const isDark = document.documentElement.classList.contains('dark');
             return {
-                mainNumbers,
-                bonusNumber,
-                isSemiAuto: fixedNumbers.size > 0,
-                stats: {
-                    sum,
-                    oddEven: `${oddCount}:${evenCount}`,
-                    lowHigh: `${lowCount}:${highCount}`,
-                    isIdealSum: sum >= 100 && sum <= 175
-                }
+                text: isDark ? '#cbd5e1' : '#475569',
+                grid: isDark ? 'rgba(148, 163, 184, 0.12)' : 'rgba(148, 163, 184, 0.2)'
             };
         }
 
-        function generateLottoGames(playSoundEffect = true) {
-            const includeBonus = document.getElementById('bonus-toggle').checked;
-            const modeText = fixedNumbers.size > 0 ? '반자동' : '자동';
-            document.getElementById('current-draw-mode-badge').textContent = `${modeText} ${gameCount}게임`;
-
-            currentGeneratedSets = [];
-            for (let i = 0; i < gameCount; i++) {
-                currentGeneratedSets.push(drawSingleLottoSet(includeBonus));
-            }
-
-            renderCurrentResults();
-
-            if (playSoundEffect) {
-                for (let k = 0; k < 6; k++) {
-                    setTimeout(() => playPopSound(k), k * 55);
-                }
-            }
-
-            // 추첨 기록에 저장
-            saveToHistory(currentGeneratedSets, modeText);
+        // ==========================================
+        // TAB 1: 단리 vs 복리 & 세금·물가 필터 계산
+        // ==========================================
+        function resetTab1() {
+            document.getElementById('t1_initial').value = 10000000;
+            document.getElementById('t1_monthly').value = 500000;
+            document.getElementById('t1_rate').value = 7;
+            document.getElementById('t1_years').value = 15;
+            document.getElementById('t1_tax').value = "0.154";
+            document.getElementById('t1_inflation').value = 2.5;
+            calcTab1();
         }
 
-        // --- 6. 추첨 결과 화면 렌더링 ---
-        function renderCurrentResults() {
-            const container = document.getElementById('lotto-results-container');
-            container.innerHTML = '';
+        function calcTab1() {
+            const P = Math.max(0, parseFloat(document.getElementById('t1_initial').value) || 0);
+            const PMT = Math.max(0, parseFloat(document.getElementById('t1_monthly').value) || 0);
+            const annualRate = parseFloat(document.getElementById('t1_rate').value) / 100;
+            const years = parseInt(document.getElementById('t1_years').value);
+            const taxRate = parseFloat(document.getElementById('t1_tax').value);
+            const inflationRate = parseFloat(document.getElementById('t1_inflation').value) / 100;
 
-            currentGeneratedSets.forEach((set, idx) => {
-                const row = document.createElement('div');
-                row.className = 'p-4 sm:p-5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 dark:bg-slate-800/60 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-colors';
+            // Update Input Labels
+            document.getElementById('t1_init_kr').textContent = formatKoreanWon(P);
+            document.getElementById('t1_monthly_kr').textContent = formatKoreanWon(PMT);
+            document.getElementById('t1_rate_val').textContent = (annualRate * 100).toFixed(1);
+            document.getElementById('t1_years_val').textContent = years;
+            document.getElementById('t1_inflation_val').textContent = (inflationRate * 100).toFixed(1);
 
-                // 좌측: 게임 라벨 (A~E) + 자동/반자동 배지
-                const labelHtml = `
-                    <div class="flex items-center justify-between lg:justify-start gap-3 min-w-[115px]">
-                        <div class="flex items-center gap-2">
-                            <span class="w-7 h-7 rounded-lg bg-slate-900 dark:bg-indigo-600 text-white font-mono font-extrabold text-xs flex items-center justify-center">
-                                ${GAME_LABELS[idx]}
-                            </span>
-                            <span class="text-xs font-bold px-2 py-0.5 rounded-md ${
-                                set.isSemiAuto
-                                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                                    : 'bg-slate-200/80 text-slate-700 dark:bg-slate-700 dark:text-slate-200'
-                            }">
-                                ${set.isSemiAuto ? '반자동' : '자동'}
-                            </span>
-                        </div>
-                        <button type="button" onclick="copySingleSet(${idx})"
-                            class="lg:hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300">
-                            <i class="fa-regular fa-copy text-indigo-500"></i> 복사
-                        </button>
-                    </div>
+            const rule72 = (72 / (annualRate * 100)).toFixed(1);
+            document.getElementById('t1_rule72_badge').textContent = `72법칙: 거치 원금 2배 소요 기간 약 ${rule72}년 (세전)`;
+
+            const labels = [];
+            const dataPrincipal = [];
+            const dataSimpleAfterTax = [];
+            const dataCompoundAfterTax = [];
+            const dataRealCompound = [];
+
+            const tbody = document.getElementById('t1_table_body');
+            tbody.innerHTML = '';
+
+            const monthlyRate = annualRate / 12;
+
+            for (let y = 1; y <= years; y++) {
+                const m = y * 12;
+                const totalPrincipal = P + PMT * m;
+
+                // 1. 단리 계산 (초기 거치금 단리 + 매월 적립금 단리)
+                const simpleInterestInit = P * annualRate * y;
+                const simpleInterestMonthly = PMT * (m * (m + 1) / 2) * (annualRate / 12);
+                const totalSimpleInterestAfterTax = (simpleInterestInit + simpleInterestMonthly) * (1 - taxRate);
+                const simpleFinal = totalPrincipal + totalSimpleInterestAfterTax;
+
+                // 2. 월복리 계산
+                let compoundGross = P * Math.pow(1 + monthlyRate, m);
+                if (monthlyRate > 0) {
+                    compoundGross += PMT * ((Math.pow(1 + monthlyRate, m) - 1) / monthlyRate) * (1 + monthlyRate);
+                } else {
+                    compoundGross += PMT * m;
+                }
+                const compoundInterestGross = compoundGross - totalPrincipal;
+                const compoundInterestAfterTax = compoundInterestGross * (1 - taxRate);
+                const compoundFinal = totalPrincipal + compoundInterestAfterTax;
+
+                // 3. 물가상승률 반영 실질 구매력 (현재 가치로 할인)
+                const realValue = compoundFinal / Math.pow(1 + inflationRate, y);
+
+                labels.push(`${y}년차`);
+                dataPrincipal.push(Math.round(totalPrincipal));
+                dataSimpleAfterTax.push(Math.round(simpleFinal));
+                dataCompoundAfterTax.push(Math.round(compoundFinal));
+                dataRealCompound.push(Math.round(realValue));
+
+                // Table Row
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 dark:hover:bg-slate-800/40';
+                tr.innerHTML = `
+                    <td class="py-2.5 px-4 text-left font-semibold">${y}년</td>
+                    <td class="py-2.5 px-4 text-slate-600 dark:text-slate-400">${formatKoreanWon(totalPrincipal)}</td>
+                    <td class="py-2.5 px-4">${formatKoreanWon(simpleFinal)}</td>
+                    <td class="py-2.5 px-4 font-bold text-blue-600 dark:text-blue-400">${formatKoreanWon(compoundFinal)}</td>
+                    <td class="py-2.5 px-4 font-semibold text-amber-600 dark:text-amber-400">${formatKoreanWon(realValue)}</td>
                 `;
+                tbody.appendChild(tr);
+            }
 
-                // 중앙: 6개 로또 볼 + 보너스 볼
-                const ballsHtml = set.mainNumbers.map((num, bIdx) => {
-                    const delay = (idx * 0.06 + bIdx * 0.05).toFixed(2);
-                    const isFixedPin = fixedNumbers.has(num);
-                    return `
-                        <div class="relative inline-flex">
-                            <span class="lotto-ball w-10 h-10 sm:w-12 sm:h-12 text-sm sm:text-base ${getBallColorClass(num)}" style="animation-delay: ${delay}s">
-                                ${num}
-                            </span>
-                            ${isFixedPin ? '<span title="고정수" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-indigo-600 text-white text-[9px] flex items-center justify-center shadow border border-white"><i class="fa-solid fa-thumbtack"></i></span>' : ''}
-                        </div>
-                    `;
-                }).join('');
+            const finalPrincipal = dataPrincipal[years - 1];
+            const finalSimple = dataSimpleAfterTax[years - 1];
+            const finalCompound = dataCompoundAfterTax[years - 1];
+            const finalReal = dataRealCompound[years - 1];
+            const diff = finalCompound - finalSimple;
 
-                const bonusHtml = set.bonusNumber !== null ? `
-                    <span class="text-slate-400 dark:text-slate-500 font-black text-sm sm:text-base mx-0.5 sm:mx-1">+</span>
-                    <div class="relative inline-flex" title="2등 보너스 번호">
-                        <span class="lotto-ball w-10 h-10 sm:w-12 sm:h-12 text-sm sm:text-base ${getBallColorClass(set.bonusNumber)} ring-2 ring-offset-2 ring-amber-400 dark:ring-offset-slate-900" style="animation-delay: ${(idx * 0.06 + 0.34).toFixed(2)}s">
-                            ${set.bonusNumber}
-                        </span>
-                        <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-extrabold text-[9px] uppercase tracking-tighter shadow">BONUS</span>
-                    </div>
-                ` : '';
+            document.getElementById('t1_out_principal').textContent = formatKoreanWon(finalPrincipal);
+            document.getElementById('t1_out_principal_exact').textContent = formatExactWon(finalPrincipal);
 
-                // 우측: 조합 미니 분석 (총합, 홀짝, 고저) 및 복사 버튼
-                const statsHtml = `
-                    <div class="flex flex-wrap items-center justify-between lg:justify-end gap-2 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-200/60 dark:border-slate-700/60 text-xs">
-                        <div class="flex items-center gap-1.5 flex-wrap">
-                            <span class="px-2.5 py-1 rounded-lg font-mono font-bold ${
-                                set.stats.isIdealSum
-                                    ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                                    : 'bg-slate-200/70 text-slate-600 dark:bg-slate-700 dark:text-slate-300'
-                            }" title="6개 번호 합계 (권장: 100~175)">
-                                합계 ${set.stats.sum}
-                            </span>
-                            <span class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-mono text-slate-600 dark:text-slate-300">
-                                홀짝 ${set.stats.oddEven}
-                            </span>
-                            <span class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-mono text-slate-600 dark:text-slate-300" title="저번호(1~22) : 고번호(23~45)">
-                                고저 ${set.stats.lowHigh}
-                            </span>
-                        </div>
+            document.getElementById('t1_out_simple').textContent = formatKoreanWon(finalSimple);
+            document.getElementById('t1_out_simple_sub').textContent = `세후 단리 이자: +${formatKoreanWon(finalSimple - finalPrincipal)}`;
 
-                        <button type="button" onclick="copySingleSet(${idx})" title="이 게임 번호 복사"
-                            class="hidden lg:inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-indigo-50 dark:bg-slate-900 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition-colors">
-                            <i class="fa-regular fa-copy text-indigo-500"></i>
-                            <span>복사</span>
-                        </button>
-                    </div>
-                `;
+            document.getElementById('t1_out_compound').textContent = formatKoreanWon(finalCompound);
+            document.getElementById('t1_out_compound_sub').textContent = `세후 복리 수익: +${formatKoreanWon(finalCompound - finalPrincipal)}`;
+            document.getElementById('t1_out_badge').textContent = `단리 대비 +${formatKoreanWon(diff)}`;
 
-                row.innerHTML = `
-                    ${labelHtml}
-                    <div class="flex items-center flex-wrap gap-2 sm:gap-2.5 justify-center lg:justify-start py-1">
-                        ${ballsHtml}
-                        ${bonusHtml}
-                    </div>
-                    ${statsHtml}
-                `;
+            document.getElementById('t1_out_real').textContent = formatKoreanWon(finalReal);
+            document.getElementById('t1_out_real_sub').textContent = `연 ${(inflationRate * 100).toFixed(1)}% 물가상승 반영 시 현재 체감 구매력`;
 
-                container.appendChild(row);
+            // Render Chart 1
+            const colors = getChartColors();
+            const ctx = document.getElementById('chartTab1').getContext('2d');
+            if (chart1) chart1.destroy();
+            chart1 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: '복리 만기액 (세후)',
+                            data: dataCompoundAfterTax,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: '단리 만기액 (세후)',
+                            data: dataSimpleAfterTax,
+                            borderColor: '#10b981',
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            fill: false,
+                            tension: 0.2
+                        },
+                        {
+                            label: '물가 반영 실질 구매력',
+                            data: dataRealCompound,
+                            borderColor: '#f59e0b',
+                            borderWidth: 2.5,
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: '누적 납입 원금',
+                            data: dataPrincipal,
+                            borderColor: '#94a3b8',
+                            borderWidth: 1.5,
+                            fill: false,
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { labels: { color: colors.text, font: { family: 'Pretendard' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${formatKoreanWon(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: colors.text }, grid: { color: colors.grid } },
+                        y: {
+                            ticks: {
+                                color: colors.text,
+                                callback: (v) => formatKoreanWon(v)
+                            },
+                            grid: { color: colors.grid }
+                        }
+                    }
+                }
             });
         }
 
-        // --- 7. 추첨 기록 (History) 관리 ---
-        function saveToHistory(sets, modeText) {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        // ==========================================
+        // TAB 2: 예금 vs 적금 실효수익률 비교 계산
+        // ==========================================
+        function calcTab2() {
+            const totalPrincipal = Math.max(100000, parseFloat(document.getElementById('t2_total').value) || 0);
+            const rate = parseFloat(document.getElementById('t2_rate').value) / 100;
+            const months = parseInt(document.getElementById('t2_months').value);
+            const taxRate = parseFloat(document.getElementById('t2_tax').value);
 
-            const entry = {
-                id: Date.now(),
-                time: timeStr,
-                modeText: `${modeText} ${sets.length}게임`,
-                sets: JSON.parse(JSON.stringify(sets))
-            };
+            const monthlyPayment = totalPrincipal / months;
 
-            drawHistory.unshift(entry);
-            if (drawHistory.length > 15) {
-                drawHistory.pop();
-            }
+            document.getElementById('t2_total_kr').textContent = formatKoreanWon(totalPrincipal);
+            document.getElementById('t2_rate_val').textContent = (rate * 100).toFixed(1);
+            document.getElementById('t2_monthly_equiv').textContent =
+                `• 예금: 첫날 ${formatKoreanWon(totalPrincipal)} 일시 예치 vs 적금: 매월 ${formatKoreanWon(monthlyPayment)}씩 ${months}개월 납입`;
 
-            try {
-                localStorage.setItem('lotto645_history', JSON.stringify(drawHistory));
-            } catch (e) {}
+            // 정기예금 이자 계산
+            const depInterestGross = totalPrincipal * rate * (months / 12);
+            const depInterestNet = depInterestGross * (1 - taxRate);
+            const depEffectiveYield = (depInterestNet / totalPrincipal) * 100;
 
-            renderHistory();
-        }
+            // 정기적금 이자 계산: 월납입액 * (n*(n+1)/2) * (연이율/12)
+            const savInterestGross = monthlyPayment * (months * (months + 1) / 2) * (rate / 12);
+            const savInterestNet = savInterestGross * (1 - taxRate);
+            const savEffectiveYield = (savInterestNet / totalPrincipal) * 100;
 
-        function loadHistoryFromStorage() {
-            try {
-                const saved = localStorage.getItem('lotto645_history');
-                if (saved) {
-                    drawHistory = JSON.parse(saved);
+            // 손익분기 동등 적금 금리: 예금과 같은 이자를 받으려면 필요한 적금 금리 = rate * (2 * months) / (months + 1)
+            const equivSavRate = (rate * 100) * (2 * months) / (months + 1);
+
+            document.getElementById('t2_equiv_notice').innerHTML =
+                `연 <strong>${(rate * 100).toFixed(1)}%</strong> 정기예금과 동일한 이자를 받으려면, 정기적금 금리는 최소 <strong class="text-emerald-600 dark:text-emerald-400">연 ${equivSavRate.toFixed(2)}%</strong> 이상이어야 합니다.`;
+
+            document.getElementById('t2_dep_yield').textContent = `실효수익률 +${depEffectiveYield.toFixed(2)}%`;
+            document.getElementById('t2_dep_interest').textContent = formatExactWon(depInterestNet);
+            document.getElementById('t2_dep_total').textContent = `만기 총 수령액: ${formatExactWon(totalPrincipal + depInterestNet)}`;
+
+            document.getElementById('t2_sav_yield').textContent = `실효수익률 +${savEffectiveYield.toFixed(2)}%`;
+            document.getElementById('t2_sav_interest').textContent = formatExactWon(savInterestNet);
+            document.getElementById('t2_sav_total').textContent = `만기 총 수령액: ${formatExactWon(totalPrincipal + savInterestNet)}`;
+
+            document.getElementById('t2_diff_badge').textContent =
+                `예금이 적금보다 세후 이자 ${formatExactWon(depInterestNet - savInterestNet)} 더 많음`;
+
+            const colors = getChartColors();
+            const ctx = document.getElementById('chartTab2').getContext('2d');
+            if (chart2) chart2.destroy();
+            chart2 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['정기예금 (일시 예치)', '정기적금 (매월 분할 납입)'],
+                    datasets: [
+                        {
+                            label: '세전 총 이자',
+                            data: [Math.round(depInterestGross), Math.round(savInterestGross)],
+                            backgroundColor: 'rgba(148, 163, 184, 0.45)',
+                            borderRadius: 8
+                        },
+                        {
+                            label: '세후 실수령 이자',
+                            data: [Math.round(depInterestNet), Math.round(savInterestNet)],
+                            backgroundColor: ['#2563eb', '#10b981'],
+                            borderRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: colors.text } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${formatExactWon(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: colors.text }, grid: { display: false } },
+                        y: {
+                            ticks: { color: colors.text, callback: (v) => formatKoreanWon(v) },
+                            grid: { color: colors.grid }
+                        }
+                    }
                 }
-            } catch (e) {
-                drawHistory = [];
-            }
-            renderHistory();
+            });
         }
 
-        function renderHistory() {
-            const listEl = document.getElementById('history-list');
-            const badgeEl = document.getElementById('history-count-badge');
-            badgeEl.textContent = drawHistory.length;
+        // ==========================================
+        // TAB 3: 배당 재투자(DRIP) 스노우볼 시뮬레이터
+        // ==========================================
+        function calcTab3() {
+            const init = Math.max(0, parseFloat(document.getElementById('t3_initial').value) || 0);
+            const monthly = Math.max(0, parseFloat(document.getElementById('t3_monthly').value) || 0);
+            const divYield = parseFloat(document.getElementById('t3_div_yield').value) / 100;
+            const growth = parseFloat(document.getElementById('t3_growth').value) / 100;
+            const years = parseInt(document.getElementById('t3_years').value);
+            const taxRate = parseFloat(document.getElementById('t3_tax').value);
 
-            if (drawHistory.length === 0) {
-                listEl.innerHTML = `
-                    <div class="py-10 text-center text-slate-400 dark:text-slate-500 text-sm">
-                        <i class="fa-solid fa-clover text-2xl mb-2 block opacity-40"></i>
-                        아직 저장된 추첨 기록이 없습니다. 상단의 [번호 추첨하기] 버튼을 눌러보세요!
-                    </div>
-                `;
-                return;
-            }
+            document.getElementById('t3_init_kr').textContent = formatKoreanWon(init);
+            document.getElementById('t3_monthly_kr').textContent = formatKoreanWon(monthly);
+            document.getElementById('t3_div_val').textContent = (divYield * 100).toFixed(1);
+            document.getElementById('t3_growth_val').textContent = (growth * 100).toFixed(1);
+            document.getElementById('t3_years_val').textContent = years;
 
-            listEl.innerHTML = drawHistory.map((item, hIdx) => {
-                const firstSet = item.sets[0];
-                const extraCount = item.sets.length - 1;
+            const netDivYield = divYield * (1 - taxRate);
 
-                const miniBalls = firstSet.mainNumbers.map(n => `
-                    <span class="w-7 h-7 rounded-full text-[11px] font-mono font-extrabold text-white inline-flex items-center justify-center shadow-sm ${getBallColorClass(n)}">
-                        ${n}
-                    </span>
-                `).join('');
+            let assetDrip = init;
+            let assetNoDrip = init;
 
-                const miniBonus = firstSet.bonusNumber !== null ? `
-                    <span class="text-slate-400 text-xs font-bold mx-0.5">+</span>
-                    <span class="w-7 h-7 rounded-full text-[11px] font-mono font-extrabold text-white inline-flex items-center justify-center shadow-sm ring-1 ring-amber-400 ${getBallColorClass(firstSet.bonusNumber)}">
-                        ${firstSet.bonusNumber}
-                    </span>
-                ` : '';
+            const labels = [];
+            const dataDrip = [];
+            const dataNoDrip = [];
+            const dataAnnualDivDrip = [];
 
-                return `
-                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div class="flex flex-wrap items-center gap-2.5">
-                            <span class="text-xs font-mono font-bold text-slate-400 dark:text-slate-500">${item.time}</span>
-                            <span class="px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 text-[11px] font-bold">
-                                ${item.modeText}
-                            </span>
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                ${miniBalls}
-                                ${miniBonus}
-                            </div>
-                            ${extraCount > 0 ? `<span class="text-xs font-bold text-slate-500 dark:text-slate-400 ml-1">외 ${extraCount}게임</span>` : ''}
-                        </div>
+            for (let y = 1; y <= years; y++) {
+                // 연간 추가 납입금 반영
+                assetDrip += monthly * 12;
+                assetNoDrip += monthly * 12;
 
-                        <button type="button" onclick="copyHistoryEntry(${hIdx})"
-                            class="self-end sm:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 transition-colors">
-                            <i class="fa-regular fa-copy text-indigo-500"></i>
-                            <span>전체 복사</span>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
+                // 주가 성장 반영
+                assetDrip *= (1 + growth);
+                assetNoDrip *= (1 + growth);
 
-        function clearHistory() {
-            drawHistory = [];
-            try {
-                localStorage.removeItem('lotto645_history');
-            } catch (e) {}
-            renderHistory();
-            showToast('추첨 기록이 모두 초기화되었습니다.');
-        }
+                // 세후 배당금 산출
+                const annualDivDrip = assetDrip * netDivYield;
 
-        // --- 8. 클립보드 복사 유틸리티 (execCommand 사용) ---
-        function formatSetToText(set, idx) {
-            const mainStr = set.mainNumbers.map(n => String(n).padStart(2, '0')).join(', ');
-            const bonusStr = set.bonusNumber !== null ? ` + 보너스 [${String(set.bonusNumber).padStart(2, '0')}]` : '';
-            return `${GAME_LABELS[idx]}게임 (${set.isSemiAuto ? '반자동' : '자동'}): ${mainStr}${bonusStr} (합계:${set.stats.sum})`;
-        }
+                // DRIP은 배당금을 자산에 재투자 합산
+                assetDrip += annualDivDrip;
 
-        function copyTextToClipboard(text, message) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            showToast(message);
-        }
-
-        function copySingleSet(idx) {
-            const set = currentGeneratedSets[idx];
-            if (!set) return;
-            const text = formatSetToText(set, idx);
-            copyTextToClipboard(text, `${GAME_LABELS[idx]}게임 로또 번호가 복사되었습니다!`);
-        }
-
-        function copyCurrentResults() {
-            if (!currentGeneratedSets.length) return;
-            const lines = currentGeneratedSets.map((set, idx) => formatSetToText(set, idx));
-            const fullText = `[로또 6/45 추첨 결과]\n` + lines.join('\n');
-            copyTextToClipboard(fullText, `현재 추첨된 ${currentGeneratedSets.length}게임 번호가 모두 복사되었습니다!`);
-        }
-
-        function copyHistoryEntry(hIdx) {
-            const item = drawHistory[hIdx];
-            if (!item) return;
-            const lines = item.sets.map((set, idx) => formatSetToText(set, idx));
-            const fullText = `[로또 6/45 추첨 기록 - ${item.time}]\n` + lines.join('\n');
-            copyTextToClipboard(fullText, `${item.time} 추첨 번호가 복사되었습니다!`);
-        }
-
-        // --- 9. 다크 모드 & 커스텀 토스트 알림 ---
-        function initTheme() {
-            const saved = localStorage.getItem('lotto645_theme');
-            if (saved === 'dark') {
-                document.documentElement.classList.add('dark');
-                document.getElementById('theme-icon-dark').classList.add('hidden');
-                document.getElementById('theme-icon-light').classList.remove('hidden');
-            }
-        }
-
-        function toggleTheme() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            document.getElementById('theme-icon-dark').classList.toggle('hidden', isDark);
-            document.getElementById('theme-icon-light').classList.toggle('hidden', !isDark);
-            localStorage.setItem('lotto645_theme', isDark ? 'dark' : 'light');
-        }
-
-        let toastTimer = null;
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            const toastIcon = document.getElementById('toast-icon');
-
-            toastMsg.textContent = msg;
-            if (type === 'warning') {
-                toastIcon.className = 'fa-solid fa-circle-exclamation text-amber-400 text-base';
-            } else {
-                toastIcon.className = 'fa-solid fa-circle-check text-emerald-400 dark:text-white text-base';
+                labels.push(`${y}년차`);
+                dataDrip.push(Math.round(assetDrip));
+                dataNoDrip.push(Math.round(assetNoDrip));
+                dataAnnualDivDrip.push(Math.round(assetDrip * netDivYield));
             }
 
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            if (toastTimer) clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => {
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 2600);
+            const finalDripAsset = dataDrip[years - 1];
+            const finalNoDripAsset = dataNoDrip[years - 1];
+            const finalMonthlyDivDrip = (finalDripAsset * netDivYield) / 12;
+            const finalMonthlyDivNoDrip = (finalNoDripAsset * netDivYield) / 12;
+
+            document.getElementById('t3_out_drip_asset').textContent = formatKoreanWon(finalDripAsset);
+            document.getElementById('t3_out_drip_monthly_div').textContent =
+                `최종 예상 세후 월 배당금: 약 ${formatKoreanWon(finalMonthlyDivDrip)} / 월`;
+
+            document.getElementById('t3_out_nodrip_asset').textContent = formatKoreanWon(finalNoDripAsset);
+            document.getElementById('t3_out_nodrip_monthly_div').textContent =
+                `최종 예상 세후 월 배당금: 약 ${formatKoreanWon(finalMonthlyDivNoDrip)} / 월`;
+
+            document.getElementById('t3_snowball_diff').textContent =
+                `배당 재투자 스노우볼 추가 자산: +${formatKoreanWon(finalDripAsset - finalNoDripAsset)}`;
+
+            const colors = getChartColors();
+            const ctx = document.getElementById('chartTab3').getContext('2d');
+            if (chart3) chart3.destroy();
+            chart3 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels,
+                    datasets: [
+                        {
+                            label: '배당 재투자(DRIP) 자산',
+                            data: dataDrip,
+                            borderColor: '#4f46e5',
+                            backgroundColor: 'rgba(79, 70, 229, 0.12)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3
+                        },
+                        {
+                            label: '배당 미재투자(현금소비) 자산',
+                            data: dataNoDrip,
+                            borderColor: '#94a3b8',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.3
+                        },
+                        {
+                            label: '연간 수령 배당금 (재투자 시)',
+                            data: dataAnnualDivDrip,
+                            borderColor: '#10b981',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { labels: { color: colors.text } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${formatKoreanWon(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: colors.text }, grid: { color: colors.grid } },
+                        y: {
+                            ticks: { color: colors.text, callback: (v) => formatKoreanWon(v) },
+                            grid: { color: colors.grid }
+                        }
+                    }
+                }
+            });
         }
 
-        // --- 10. 제휴 문의 (Formspree) 비동기 전송 ---
-        async function handlePartnershipSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            const submitBtn = document.getElementById('partnership-submit-btn');
-            const statusText = document.getElementById('partnership-status');
-            const originalBtnHtml = submitBtn.innerHTML;
+        // ==========================================
+        // TAB 4: 목표 금액 역산(Reverse) 계산기
+        // ==========================================
+        function calcTab4() {
+            const goal = Math.max(1000000, parseFloat(document.getElementById('t4_goal').value) || 0);
+            const seed = Math.max(0, parseFloat(document.getElementById('t4_seed').value) || 0);
+            const years = parseInt(document.getElementById('t4_years').value);
+            const annualRate = parseFloat(document.getElementById('t4_rate').value) / 100;
 
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>전송 중...</span>';
+            document.getElementById('t4_goal_kr').textContent = formatKoreanWon(goal);
+            document.getElementById('t4_seed_kr').textContent = formatKoreanWon(seed);
+            document.getElementById('t4_years_val').textContent = years;
+            document.getElementById('t4_rate_val').textContent = (annualRate * 100).toFixed(1);
 
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form),
-                    headers: { 'Accept': 'application/json' }
-                });
+            const m = years * 12;
+            const r = annualRate / 12;
 
-                if (response.ok) {
-                    form.reset();
-                    statusText.innerHTML = '<span class="text-emerald-600 dark:text-emerald-400 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>제휴 문의가 성공적으로 접수되었습니다. 감사합니다!</span>';
-                    showToast('제휴 문의가 성공적으로 전송되었습니다!');
+            // 초기 시드머니가 만기 시점까지 복리로 자란 금액
+            const futureSeed = seed * Math.pow(1 + r, m);
+            const remainingGoal = Math.max(0, goal - futureSeed);
+
+            // 남은 목표액을 채우기 위한 월 적립액 역산
+            let requiredMonthly = 0;
+            if (remainingGoal > 0) {
+                if (r > 0) {
+                    const factor = ((Math.pow(1 + r, m) - 1) / r) * (1 + r);
+                    requiredMonthly = remainingGoal / factor;
                 } else {
-                    statusText.innerHTML = '<span class="text-rose-500 font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i>전송에 실패했습니다. 잠시 후 다시 시도해 주세요.</span>';
-                    showToast('문의 전송 중 오류가 발생했습니다.', 'warning');
+                    requiredMonthly = remainingGoal / m;
                 }
-            } catch (err) {
-                statusText.innerHTML = '<span class="text-rose-500 font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i>네트워크 오류가 발생했습니다. 다시 시도해 주세요.</span>';
-                showToast('네트워크 연결을 확인해 주세요.', 'warning');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnHtml;
             }
+
+            const simpleMonthly = Math.max(0, (goal - seed) / m);
+            const totalContrib = requiredMonthly * m;
+            const totalInterest = Math.max(0, goal - seed - totalContrib);
+            const profitRatio = goal > 0 ? (totalInterest / goal) * 100 : 0;
+
+            document.getElementById('t4_out_monthly').textContent = formatExactWon(requiredMonthly);
+            document.getElementById('t4_out_simple_compare').textContent =
+                `※ 이자 없이 단순 저축만 할 경우 매월 ${formatExactWon(simpleMonthly)} 필요 (월 ${formatKoreanWon(Math.max(0, simpleMonthly - requiredMonthly))} 절감)`;
+            document.getElementById('t4_out_profit_ratio').textContent = `${profitRatio.toFixed(1)}%`;
+
+            document.getElementById('t4_bd_seed').textContent = formatKoreanWon(Math.min(seed, goal));
+            document.getElementById('t4_bd_contrib').textContent = formatKoreanWon(totalContrib);
+            document.getElementById('t4_bd_interest').textContent = formatKoreanWon(totalInterest);
+
+            const colors = getChartColors();
+            const ctx = document.getElementById('chartTab4').getContext('2d');
+            if (chart4) chart4.destroy();
+            chart4 = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['초기 시드머니', '월 적립 원금 합계', '복리 이자·수익'],
+                    datasets: [{
+                        data: [Math.round(Math.min(seed, goal)), Math.round(totalContrib), Math.round(totalInterest)],
+                        backgroundColor: ['#8b5cf6', '#3b82f6', '#10b981'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: colors.text } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.label}: ${formatKoreanWon(ctx.parsed)}`
+                            }
+                        }
+                    }
+                }
+            });
         }
+
+        // ==========================================
+        // TAB 5: 대출 상환 vs 복리 투자 손익분기점 계산
+        // ==========================================
+        function calcTab5() {
+            const amount = Math.max(1000000, parseFloat(document.getElementById('t5_amount').value) || 0);
+            const loanRate = parseFloat(document.getElementById('t5_loan_rate').value) / 100;
+            const invRate = parseFloat(document.getElementById('t5_inv_rate').value) / 100;
+            const years = parseInt(document.getElementById('t5_years').value);
+            const taxRate = parseFloat(document.getElementById('t5_tax').value);
+
+            document.getElementById('t5_amount_kr').textContent = formatKoreanWon(amount);
+            document.getElementById('t5_loan_val').textContent = (loanRate * 100).toFixed(1);
+            document.getElementById('t5_inv_val').textContent = (invRate * 100).toFixed(1);
+
+            // 손익분기 세전 투자수익률
+            const breakevenPreTax = (loanRate / (1 - taxRate)) * 100;
+            document.getElementById('t5_breakeven_text').innerHTML =
+                `대출금리 <strong>${(loanRate * 100).toFixed(1)}%</strong>를 이기려면 세전 최소 <strong class="text-rose-600 dark:text-rose-400">연 ${breakevenPreTax.toFixed(2)}%</strong> 이상의 투자 수익률이 필요합니다.`;
+
+            // 대출 원금 상환 시 아끼는 복리 환산 이자 비용 (또는 확정 이자 비용)
+            const loanSaved = amount * (Math.pow(1 + loanRate, years) - 1);
+
+            // 여유 자금 복리 투자 시 세전/세후 순수익
+            const invGrossProfit = amount * (Math.pow(1 + invRate, years) - 1);
+            const invNetProfit = invGrossProfit * (1 - taxRate);
+
+            document.getElementById('t5_out_loan_saved').textContent = formatKoreanWon(loanSaved);
+            document.getElementById('t5_out_inv_profit').textContent = formatKoreanWon(invNetProfit);
+            document.getElementById('t5_out_inv_sub').textContent = `세전 수익 ${formatKoreanWon(invGrossProfit)}에서 세금 차감 후`;
+
+            const verdictCard = document.getElementById('t5_verdict_card');
+            const verdictTitle = document.getElementById('t5_verdict_title');
+            const verdictDesc = document.getElementById('t5_verdict_desc');
+
+            if (loanSaved >= invNetProfit) {
+                const diff = loanSaved - invNetProfit;
+                verdictCard.className = 'p-6 rounded-2xl text-white shadow-md bg-gradient-to-r from-rose-600 to-orange-600';
+                verdictTitle.textContent = `대출 원금 상환이 ${formatExactWon(diff)} 더 유리합니다!`;
+                verdictDesc.textContent = `투자 수익에서 세금을 떼고 나면, 위험 없이 확정적으로 아끼는 대출 이자 절감 효과가 더 큽니다.`;
+            } else {
+                const diff = invNetProfit - loanSaved;
+                verdictCard.className = 'p-6 rounded-2xl text-white shadow-md bg-gradient-to-r from-blue-600 to-emerald-600';
+                verdictTitle.textContent = `복리 투자가 세후 ${formatExactWon(diff)} 더 유리합니다!`;
+                verdictDesc.textContent = `기대 세후 투자 수익률이 대출 금리보다 높습니다. 단, 투자 변동성 리스크를 함께 고려하세요.`;
+            }
+
+            const colors = getChartColors();
+            const ctx = document.getElementById('chartTab5').getContext('2d');
+            if (chart5) chart5.destroy();
+            chart5 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['대출 상환 (확정 이자 절감)', '투자 (세전 총수익)', '투자 (세후 순수익)'],
+                    datasets: [{
+                        label: `${years}년간 누적 금액`,
+                        data: [Math.round(loanSaved), Math.round(invGrossProfit), Math.round(invNetProfit)],
+                        backgroundColor: ['#e11d48', 'rgba(148, 163, 184, 0.5)', '#2563eb'],
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => formatExactWon(ctx.parsed.y)
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: colors.text }, grid: { display: false } },
+                        y: {
+                            ticks: { color: colors.text, callback: (v) => formatKoreanWon(v) },
+                            grid: { color: colors.grid }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateAllCharts() {
+            calcTab1();
+            calcTab2();
+            calcTab3();
+            calcTab4();
+            calcTab5();
+        }
+
+        window.onload = function () {
+            updateAllCharts();
+        };
     </script>
 </body>
 </html>
