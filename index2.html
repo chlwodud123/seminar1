@@ -111,8 +111,15 @@
                     단순 이자 계산을 넘어, <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-emerald-300">세금과 물가까지 반영한</span> 실질 재테크 가이드
                 </h2>
                 <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
-                    많은 금융 계산기가 세전 표면 금리만 보여줍니다. 하지만 실제 내 손에 쥐는 돈은 <strong>복리 기간, 이자소득세(15.4%), 물가상승률(인플레이션), 납입 방식(예금 vs 적금)</strong>에 따라 완전히 달라집니다. 아래 5가지 탭에서 개념 설명과 함께 직접 시뮬레이션해 보세요.
+                    많은 금융 계산기가 세전 표면 금리만 보여줍니다. 하지만 실제 내 손에 쥐는 돈은 <strong>복리 기간, 이자소득세(15.4%), 물가상승률(인플레이션), 납입 방식(예금 vs 적금)</strong>에 따라 완전히 달라집니다. 아래 6가지 탭에서 개념 설명과 함께 직접 시뮬레이션하고 <strong>두 개의 금융상품을 1:1로 비교</strong>해 보세요.
                 </p>
+                <div class="pt-1 flex flex-wrap gap-2">
+                    <button onclick="switchTab('tab6')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-cyan-500/25 transition">
+                        <i class="fa-solid fa-code-compare"></i>
+                        <span>두 금융상품 A vs B 바로 비교하기</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- 3 Quick Concept Summary Cards -->
@@ -144,28 +151,33 @@
             </div>
         </section>
 
-        <!-- 5 Interactive Feature Navigation Tabs -->
+        <!-- 6 Interactive Feature Navigation Tabs -->
         <nav class="bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800">
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2" role="tablist">
-                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn tab-active flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" role="tablist">
+                <button onclick="switchTab('tab1')" id="btn-tab1" class="tab-btn tab-active flex flex-col sm:flex-row items-center justify-center gap-1.5 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
                     <i class="fa-solid fa-chart-area text-base"></i>
                     <span>1. 단리·복리 & 물가</span>
                 </button>
-                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <button onclick="switchTab('tab2')" id="btn-tab2" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
                     <i class="fa-solid fa-piggy-bank text-base"></i>
-                    <span>2. 예금 vs 적금 비교</span>
+                    <span>2. 예금 vs 적금</span>
                 </button>
-                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <button onclick="switchTab('tab3')" id="btn-tab3" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
                     <i class="fa-solid fa-coins text-base"></i>
-                    <span>3. 배당 재투자 스노우볼</span>
+                    <span>3. 배당 스노우볼</span>
                 </button>
-                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <button onclick="switchTab('tab4')" id="btn-tab4" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
                     <i class="fa-solid fa-bullseye text-base"></i>
                     <span>4. 목표 금액 역산</span>
                 </button>
-                <button onclick="switchTab('tab5')" id="btn-tab5" class="tab-btn col-span-2 sm:col-span-1 flex flex-col sm:flex-row items-center justify-center gap-2 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                <button onclick="switchTab('tab5')" id="btn-tab5" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
                     <i class="fa-solid fa-hand-holding-dollar text-base"></i>
                     <span>5. 대출상환 vs 투자</span>
+                </button>
+                <button onclick="switchTab('tab6')" id="btn-tab6" class="tab-btn flex flex-col sm:flex-row items-center justify-center gap-1.5 px-3 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all relative">
+                    <i class="fa-solid fa-code-compare text-base text-cyan-600 dark:text-cyan-400"></i>
+                    <span>6. 두 금융상품 비교</span>
+                    <span class="absolute -top-1.5 -right-1 px-1.5 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-500 text-white shadow">NEW</span>
                 </button>
             </div>
         </nav>
@@ -841,6 +853,351 @@
                         </h4>
                         <div class="h-60 w-full">
                             <canvas id="chartTab5"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 6: 두 금융상품 A vs B 1:1 맞춤 비교기
+             ========================================== -->
+        <section id="tab6" class="tab-panel hidden space-y-6">
+            <!-- Concept & Preset Banner -->
+            <div class="bg-cyan-50/80 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-900/60 rounded-2xl p-5 sm:p-6 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                    <div class="flex items-start gap-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-600 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+                            <i class="fa-solid fa-code-compare"></i>
+                        </div>
+                        <div class="space-y-1.5">
+                            <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                                💡 두 금융상품 A vs B 1:1 맞대결 비교 시뮬레이터
+                            </h3>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                은행·저축은행·ISA·ETF 등 <strong>서로 다른 두 금융상품의 납입 방식(예금·적금·혼합), 금리, 단리·복리, 과세 혜택, 수수료, 만기 기간</strong>을 각각 입력해 보세요. 세금과 보수를 모두 뗀 <strong>진짜 세후 순수익과 만기 실수령액 승자</strong>를 즉시 판정해 드립니다.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="swapProductsTab6()" class="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-cyan-50 dark:hover:bg-slate-700 transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-right-left text-cyan-600"></i> A ↔ B 조건 서로 바꾸기
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Comparison Scenario Presets -->
+                <div class="pt-3 border-t border-cyan-200/60 dark:border-cyan-800/50 flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-bold text-cyan-800 dark:text-cyan-300 mr-1">
+                        <i class="fa-solid fa-bolt mr-1"></i>원클릭 비교 시나리오:
+                    </span>
+                    <button onclick="applyPresetTab6('preset1')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-cyan-300 dark:border-cyan-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-600 transition">
+                        ① 시중은행 예금(3.5% 일반과세) vs 상호금융 예탁금(3.3% 세금우대)
+                    </button>
+                    <button onclick="applyPresetTab6('preset2')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-cyan-300 dark:border-cyan-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-600 transition">
+                        ② 고금리 특판적금(연 6.0% 단리) vs 정기예금(연 3.8% 월복리)
+                    </button>
+                    <button onclick="applyPresetTab6('preset3')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-cyan-300 dark:border-cyan-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-600 transition">
+                        ③ 일반계좌 적립투자(연 7%·15.4%과세) vs ISA 비과세 투자(연 7%·비과세)
+                    </button>
+                    <button onclick="applyPresetTab6('preset4')" class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-cyan-300 dark:border-cyan-800 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-600 transition">
+                        ④ 고보수 액티브펀드(연 8%·보수 1.2%) vs 저보수 ETF(연 7.5%·보수 0.05%)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product A vs Product B Input Cards (2 Columns Side-by-Side) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- 상품 A 입력 카드 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border-2 border-blue-500/40 dark:border-blue-500/30 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-blue-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">A</span>
+                            <input type="text" id="t6_a_name" value="상품 A (시중은행 고금리 예금)" oninput="calcTab6()"
+                                class="font-bold text-slate-900 dark:text-white bg-transparent border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-blue-500 outline-none px-1 py-0.5 text-sm sm:text-base w-56 sm:w-64">
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">비교 상품 1</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">상품 유형 (납입 방식)</label>
+                            <select id="t6_a_type" onchange="onTypeChangeTab6('a')" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="deposit" selected>거치식 (목돈 일시 예치)</option>
+                                <option value="saving">적립식 (매월 정액 적립)</option>
+                                <option value="mixed">혼합식 (초기목돈 + 월적립)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">이자·수익 계산 방식</label>
+                            <select id="t6_a_method" onchange="calcTab6()" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="simple" selected>단리 (만기 일시지급)</option>
+                                <option value="monthly_compound">월복리 (매월 이자 재투자)</option>
+                                <option value="annual_compound">연복리 (매년 이자 재투자)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div id="t6_a_init_wrap" class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">초기 예치금 (목돈)</label>
+                                <span id="t6_a_init_kr" class="font-bold text-blue-600 dark:text-blue-400">2,000만 원</span>
+                            </div>
+                            <input type="number" id="t6_a_initial" value="20000000" step="1000000" min="0" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div id="t6_a_monthly_wrap" class="space-y-1 opacity-40 pointer-events-none">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">매월 적립금</label>
+                                <span id="t6_a_monthly_kr" class="font-bold text-blue-600 dark:text-blue-400">0원</span>
+                            </div>
+                            <input type="number" id="t6_a_monthly" value="0" step="100000" min="0" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">연 금리 / 기대수익률 (%)</label>
+                                <span class="font-bold text-blue-600 dark:text-blue-400"><span id="t6_a_rate_val">4.00</span>%</span>
+                            </div>
+                            <input type="number" id="t6_a_rate" value="4.0" step="0.1" min="0" max="50" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">연 수수료·운용보수 (%)</label>
+                                <span class="font-bold text-slate-500"><span id="t6_a_fee_val">0.00</span>%</span>
+                            </div>
+                            <input type="number" id="t6_a_fee" value="0" step="0.05" min="0" max="10" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">가입·투자 기간 (개월)</label>
+                            <select id="t6_a_months" onchange="calcTab6()" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="6">6개월 (0.5년)</option>
+                                <option value="12" selected>12개월 (1년)</option>
+                                <option value="18">18개월 (1.5년)</option>
+                                <option value="24">24개월 (2년)</option>
+                                <option value="36">36개월 (3년)</option>
+                                <option value="60">60개월 (5년)</option>
+                                <option value="120">120개월 (10년)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">과세 구분</label>
+                            <select id="t6_a_tax" onchange="calcTab6()" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="0.154" selected>일반과세 (15.4%)</option>
+                                <option value="0.095">세금우대 / 조합예탁금 (9.5%)</option>
+                                <option value="0.055">연금저축 저율과세 (5.5%)</option>
+                                <option value="0">비과세 / ISA 비과세한도 (0%)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 상품 B 입력 카드 -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border-2 border-emerald-500/40 dark:border-emerald-500/30 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">B</span>
+                            <input type="text" id="t6_b_name" value="상품 B (상호금융 세금우대 예탁금)" oninput="calcTab6()"
+                                class="font-bold text-slate-900 dark:text-white bg-transparent border-b border-dashed border-slate-300 dark:border-slate-700 focus:border-emerald-500 outline-none px-1 py-0.5 text-sm sm:text-base w-56 sm:w-64">
+                        </div>
+                        <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-300">비교 상품 2</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">상품 유형 (납입 방식)</label>
+                            <select id="t6_b_type" onchange="onTypeChangeTab6('b')" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="deposit" selected>거치식 (목돈 일시 예치)</option>
+                                <option value="saving">적립식 (매월 정액 적립)</option>
+                                <option value="mixed">혼합식 (초기목돈 + 월적립)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">이자·수익 계산 방식</label>
+                            <select id="t6_b_method" onchange="calcTab6()" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="simple">단리 (만기 일시지급)</option>
+                                <option value="monthly_compound" selected>월복리 (매월 이자 재투자)</option>
+                                <option value="annual_compound">연복리 (매년 이자 재투자)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div id="t6_b_init_wrap" class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">초기 예치금 (목돈)</label>
+                                <span id="t6_b_init_kr" class="font-bold text-emerald-600 dark:text-emerald-400">2,000만 원</span>
+                            </div>
+                            <input type="number" id="t6_b_initial" value="20000000" step="1000000" min="0" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div id="t6_b_monthly_wrap" class="space-y-1 opacity-40 pointer-events-none">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">매월 적립금</label>
+                                <span id="t6_b_monthly_kr" class="font-bold text-emerald-600 dark:text-emerald-400">0원</span>
+                            </div>
+                            <input type="number" id="t6_b_monthly" value="0" step="100000" min="0" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">연 금리 / 기대수익률 (%)</label>
+                                <span class="font-bold text-emerald-600 dark:text-emerald-400"><span id="t6_b_rate_val">3.80</span>%</span>
+                            </div>
+                            <input type="number" id="t6_b_rate" value="3.8" step="0.1" min="0" max="50" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-xs">
+                                <label class="font-semibold text-slate-600 dark:text-slate-400">연 수수료·운용보수 (%)</label>
+                                <span class="font-bold text-slate-500"><span id="t6_b_fee_val">0.00</span>%</span>
+                            </div>
+                            <input type="number" id="t6_b_fee" value="0" step="0.05" min="0" max="10" oninput="calcTab6()"
+                                class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">가입·투자 기간 (개월)</label>
+                            <select id="t6_b_months" onchange="calcTab6()" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="6">6개월 (0.5년)</option>
+                                <option value="12" selected>12개월 (1년)</option>
+                                <option value="18">18개월 (1.5년)</option>
+                                <option value="24">24개월 (2년)</option>
+                                <option value="36">36개월 (3년)</option>
+                                <option value="60">60개월 (5년)</option>
+                                <option value="120">120개월 (10년)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">과세 구분</label>
+                            <select id="t6_b_tax" onchange="calcTab6()" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+                                <option value="0.154">일반과세 (15.4%)</option>
+                                <option value="0.095" selected>세금우대 / 조합예탁금 (9.5%)</option>
+                                <option value="0.055">연금저축 저율과세 (5.5%)</option>
+                                <option value="0">비과세 / ISA 비과세한도 (0%)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Winner Verdict Banner -->
+            <div id="t6_winner_banner" class="p-6 rounded-2xl text-white shadow-lg bg-gradient-to-r from-emerald-600 to-teal-700 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <div class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/20">
+                        <i class="fa-solid fa-trophy text-amber-300"></i> 세후 순수익 맞대결 판정 결과
+                    </div>
+                    <h4 id="t6_winner_title" class="text-xl sm:text-2xl font-extrabold pt-1">
+                        상품 B가 세후 실수령 이자 기준 1만 5,200원 더 유리합니다!
+                    </h4>
+                    <p id="t6_winner_desc" class="text-xs sm:text-sm text-white/90">
+                        표면 금리는 상품 A가 높지만, 세금우대(9.5%)와 월복리 효과로 인해 상품 B의 실질 세후 수익이 앞섭니다.
+                    </p>
+                </div>
+                <div class="bg-white/15 backdrop-blur-sm px-5 py-3.5 rounded-xl border border-white/20 text-right shrink-0">
+                    <div class="text-xs text-white/80">세후 순수익 격차</div>
+                    <div id="t6_winner_diff" class="text-2xl sm:text-3xl font-extrabold text-amber-300">+15,200원</div>
+                </div>
+            </div>
+
+            <!-- Detailed Side-by-Side Comparison Table & Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Comparison Table (5 cols) -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                            <i class="fa-solid fa-list-check text-cyan-600 mr-1.5"></i>항목별 1:1 상세 비교표
+                        </h4>
+                        <span class="text-xs text-slate-400">단위: 원 / %</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs sm:text-sm">
+                            <thead class="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300">
+                                <tr>
+                                    <th class="py-3 px-4 text-left font-semibold">비교 항목</th>
+                                    <th id="t6_th_a" class="py-3 px-3 text-right font-bold text-blue-600 dark:text-blue-400">상품 A</th>
+                                    <th id="t6_th_b" class="py-3 px-4 text-right font-bold text-emerald-600 dark:text-emerald-400">상품 B</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">총 납입 원금</td>
+                                    <td id="t6_tb_a_prin" class="py-3 px-3 text-right font-semibold">20,000,000원</td>
+                                    <td id="t6_tb_b_prin" class="py-3 px-4 text-right font-semibold">20,000,000원</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">세전 총 이자(수익)</td>
+                                    <td id="t6_tb_a_gross" class="py-3 px-3 text-right">800,000원</td>
+                                    <td id="t6_tb_b_gross" class="py-3 px-4 text-right">773,000원</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">차감 세금 (과세)</td>
+                                    <td id="t6_tb_a_tax" class="py-3 px-3 text-right text-rose-500">-123,200원</td>
+                                    <td id="t6_tb_b_tax" class="py-3 px-4 text-right text-rose-500">-73,435원</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">차감 수수료·보수</td>
+                                    <td id="t6_tb_a_fee" class="py-3 px-3 text-right text-amber-600">0원</td>
+                                    <td id="t6_tb_b_fee" class="py-3 px-4 text-right text-amber-600">0원</td>
+                                </tr>
+                                <tr class="bg-blue-50/40 dark:bg-blue-950/20">
+                                    <td class="py-3.5 px-4 font-bold text-slate-900 dark:text-white">세후 실수령 순수익</td>
+                                    <td id="t6_tb_a_net" class="py-3.5 px-3 text-right font-extrabold text-blue-600 dark:text-blue-400">676,800원</td>
+                                    <td id="t6_tb_b_net" class="py-3.5 px-4 text-right font-extrabold text-emerald-600 dark:text-emerald-400">699,565원</td>
+                                </tr>
+                                <tr class="bg-slate-50/80 dark:bg-slate-800/40">
+                                    <td class="py-3.5 px-4 font-bold text-slate-900 dark:text-white">만기 총 실수령액</td>
+                                    <td id="t6_tb_a_total" class="py-3.5 px-3 text-right font-extrabold text-slate-900 dark:text-white">20,676,800원</td>
+                                    <td id="t6_tb_b_total" class="py-3.5 px-4 text-right font-extrabold text-slate-900 dark:text-white">20,699,565원</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">원금 대비 세후수익률</td>
+                                    <td id="t6_tb_a_yield" class="py-3 px-3 text-right font-bold text-blue-600 dark:text-blue-400">+3.38%</td>
+                                    <td id="t6_tb_b_yield" class="py-3 px-4 text-right font-bold text-emerald-600 dark:text-emerald-400">+3.50%</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-slate-500 dark:text-slate-400 font-medium">연환산 실효수익률</td>
+                                    <td id="t6_tb_a_annual_yield" class="py-3 px-3 text-right font-semibold">연 3.38%</td>
+                                    <td id="t6_tb_b_annual_yield" class="py-3 px-4 text-right font-semibold">연 3.50%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Charts (7 cols) -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Bar Chart: 세전 vs 세금 vs 세후 순수익 -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+                        <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                            <i class="fa-solid fa-chart-column text-blue-600 mr-1.5"></i>상품 A vs 상품 B 세전수익 · 세금 · 세후 순수익 비교
+                        </h4>
+                        <div class="h-56 w-full">
+                            <canvas id="chartTab6Bar"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Line Chart: 개월별 세후 누적 자산 추이 -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+                        <h4 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">
+                            <i class="fa-solid fa-chart-line text-emerald-600 mr-1.5"></i>기간별 세후 누적 자산(원금+순수익) 성장 곡선 비교
+                        </h4>
+                        <div class="h-56 w-full">
+                            <canvas id="chartTab6Line"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1562,12 +1919,396 @@
             });
         }
 
+        // ==========================================
+        // TAB 6: 두 금융상품 A vs B 1:1 맞춤 비교기
+        // ==========================================
+        let chart6Bar = null, chart6Line = null;
+
+        function onTypeChangeTab6(prefix) {
+            const type = document.getElementById(`t6_${prefix}_type`).value;
+            const initWrap = document.getElementById(`t6_${prefix}_init_wrap`);
+            const monthlyWrap = document.getElementById(`t6_${prefix}_monthly_wrap`);
+            const initInput = document.getElementById(`t6_${prefix}_initial`);
+            const monthlyInput = document.getElementById(`t6_${prefix}_monthly`);
+
+            if (type === 'deposit') {
+                initWrap.classList.remove('opacity-40', 'pointer-events-none');
+                monthlyWrap.classList.add('opacity-40', 'pointer-events-none');
+                if ((parseFloat(initInput.value) || 0) === 0) initInput.value = 12000000;
+            } else if (type === 'saving') {
+                initWrap.classList.add('opacity-40', 'pointer-events-none');
+                monthlyWrap.classList.remove('opacity-40', 'pointer-events-none');
+                if ((parseFloat(monthlyInput.value) || 0) === 0) monthlyInput.value = 1000000;
+            } else {
+                initWrap.classList.remove('opacity-40', 'pointer-events-none');
+                monthlyWrap.classList.remove('opacity-40', 'pointer-events-none');
+                if ((parseFloat(initInput.value) || 0) === 0) initInput.value = 10000000;
+                if ((parseFloat(monthlyInput.value) || 0) === 0) monthlyInput.value = 500000;
+            }
+            calcTab6();
+        }
+
+        function setProductConfigTab6(prefix, cfg) {
+            document.getElementById(`t6_${prefix}_name`).value = cfg.name;
+            document.getElementById(`t6_${prefix}_type`).value = cfg.type;
+            document.getElementById(`t6_${prefix}_method`).value = cfg.method;
+            document.getElementById(`t6_${prefix}_initial`).value = cfg.initial;
+            document.getElementById(`t6_${prefix}_monthly`).value = cfg.monthly;
+            document.getElementById(`t6_${prefix}_rate`).value = cfg.rate;
+            document.getElementById(`t6_${prefix}_fee`).value = cfg.fee;
+            document.getElementById(`t6_${prefix}_months`).value = String(cfg.months);
+            document.getElementById(`t6_${prefix}_tax`).value = String(cfg.tax);
+
+            const initWrap = document.getElementById(`t6_${prefix}_init_wrap`);
+            const monthlyWrap = document.getElementById(`t6_${prefix}_monthly_wrap`);
+            if (cfg.type === 'deposit') {
+                initWrap.classList.remove('opacity-40', 'pointer-events-none');
+                monthlyWrap.classList.add('opacity-40', 'pointer-events-none');
+            } else if (cfg.type === 'saving') {
+                initWrap.classList.add('opacity-40', 'pointer-events-none');
+                monthlyWrap.classList.remove('opacity-40', 'pointer-events-none');
+            } else {
+                initWrap.classList.remove('opacity-40', 'pointer-events-none');
+                monthlyWrap.classList.remove('opacity-40', 'pointer-events-none');
+            }
+        }
+
+        function getProductConfigTab6(prefix) {
+            return {
+                name: document.getElementById(`t6_${prefix}_name`).value.trim() || `상품 ${prefix.toUpperCase()}`,
+                type: document.getElementById(`t6_${prefix}_type`).value,
+                method: document.getElementById(`t6_${prefix}_method`).value,
+                initial: Math.max(0, parseFloat(document.getElementById(`t6_${prefix}_initial`).value) || 0),
+                monthly: Math.max(0, parseFloat(document.getElementById(`t6_${prefix}_monthly`).value) || 0),
+                rate: Math.max(0, parseFloat(document.getElementById(`t6_${prefix}_rate`).value) || 0),
+                fee: Math.max(0, parseFloat(document.getElementById(`t6_${prefix}_fee`).value) || 0),
+                months: parseInt(document.getElementById(`t6_${prefix}_months`).value) || 12,
+                tax: parseFloat(document.getElementById(`t6_${prefix}_tax`).value) || 0
+            };
+        }
+
+        function swapProductsTab6() {
+            const cfgA = getProductConfigTab6('a');
+            const cfgB = getProductConfigTab6('b');
+            setProductConfigTab6('a', cfgB);
+            setProductConfigTab6('b', cfgA);
+            calcTab6();
+        }
+
+        function applyPresetTab6(key) {
+            if (key === 'preset1') {
+                setProductConfigTab6('a', {
+                    name: '시중은행 정기예금 (3.5%·일반과세)',
+                    type: 'deposit', method: 'simple',
+                    initial: 30000000, monthly: 0,
+                    rate: 3.5, fee: 0, months: 12, tax: 0.154
+                });
+                setProductConfigTab6('b', {
+                    name: '상호금융 예탁금 (3.3%·세금우대)',
+                    type: 'deposit', method: 'simple',
+                    initial: 30000000, monthly: 0,
+                    rate: 3.3, fee: 0, months: 12, tax: 0.095
+                });
+            } else if (key === 'preset2') {
+                setProductConfigTab6('a', {
+                    name: '특판 정기적금 (연 6.0%·단리)',
+                    type: 'saving', method: 'simple',
+                    initial: 0, monthly: 1000000,
+                    rate: 6.0, fee: 0, months: 12, tax: 0.154
+                });
+                setProductConfigTab6('b', {
+                    name: '목돈 정기예금 (연 3.8%·월복리)',
+                    type: 'deposit', method: 'monthly_compound',
+                    initial: 12000000, monthly: 0,
+                    rate: 3.8, fee: 0, months: 12, tax: 0.154
+                });
+            } else if (key === 'preset3') {
+                setProductConfigTab6('a', {
+                    name: '일반계좌 적립투자 (연 7%·일반과세)',
+                    type: 'mixed', method: 'annual_compound',
+                    initial: 10000000, monthly: 500000,
+                    rate: 7.0, fee: 0.1, months: 60, tax: 0.154
+                });
+                setProductConfigTab6('b', {
+                    name: 'ISA 비과세 적립투자 (연 7%·비과세)',
+                    type: 'mixed', method: 'annual_compound',
+                    initial: 10000000, monthly: 500000,
+                    rate: 7.0, fee: 0.1, months: 60, tax: 0
+                });
+            } else if (key === 'preset4') {
+                setProductConfigTab6('a', {
+                    name: '액티브 펀드 (연 8.0%·보수 1.2%)',
+                    type: 'mixed', method: 'annual_compound',
+                    initial: 20000000, monthly: 500000,
+                    rate: 8.0, fee: 1.2, months: 120, tax: 0.154
+                });
+                setProductConfigTab6('b', {
+                    name: '저보수 인덱스 ETF (연 7.5%·보수 0.05%)',
+                    type: 'mixed', method: 'annual_compound',
+                    initial: 20000000, monthly: 500000,
+                    rate: 7.5, fee: 0.05, months: 120, tax: 0.154
+                });
+            }
+            calcTab6();
+        }
+
+        function simulateProductAtMonth(cfg, m, useZeroFee = false) {
+            const P = cfg.type === 'saving' ? 0 : cfg.initial;
+            const PMT = cfg.type === 'deposit' ? 0 : cfg.monthly;
+            const principal = P + PMT * m;
+            const effRate = Math.max(0, (cfg.rate - (useZeroFee ? 0 : cfg.fee)) / 100);
+
+            let grossTotal = principal;
+            if (cfg.method === 'simple') {
+                const initInterest = P * effRate * (m / 12);
+                const monthlyInterest = PMT * (m * (m + 1) / 2) * (effRate / 12);
+                grossTotal = principal + initInterest + monthlyInterest;
+            } else if (cfg.method === 'monthly_compound') {
+                const r = effRate / 12;
+                let comp = P * Math.pow(1 + r, m);
+                if (r > 0) {
+                    comp += PMT * ((Math.pow(1 + r, m) - 1) / r) * (1 + r);
+                } else {
+                    comp += PMT * m;
+                }
+                grossTotal = comp;
+            } else {
+                // annual_compound
+                const rEq = Math.pow(1 + effRate, 1 / 12) - 1;
+                let comp = P * Math.pow(1 + effRate, m / 12);
+                if (rEq > 0) {
+                    comp += PMT * ((Math.pow(1 + rEq, m) - 1) / rEq) * (1 + rEq);
+                } else {
+                    comp += PMT * m;
+                }
+                grossTotal = comp;
+            }
+
+            const grossInterest = Math.max(0, grossTotal - principal);
+            const taxAmount = grossInterest * cfg.tax;
+            const netInterest = grossInterest - taxAmount;
+            const netTotal = principal + netInterest;
+
+            return {
+                principal,
+                grossInterest,
+                taxAmount,
+                netInterest,
+                netTotal
+            };
+        }
+
+        function calcSingleProductTab6(cfg) {
+            const res = simulateProductAtMonth(cfg, cfg.months, false);
+            const resNoFee = simulateProductAtMonth(cfg, cfg.months, true);
+            const feeCost = Math.max(0, resNoFee.grossInterest - res.grossInterest);
+            const totalYieldPct = res.principal > 0 ? (res.netInterest / res.principal) * 100 : 0;
+            const years = cfg.months / 12;
+            const annualYieldPct = years > 0 ? totalYieldPct / years : totalYieldPct;
+
+            return {
+                ...res,
+                feeCost,
+                totalYieldPct,
+                annualYieldPct
+            };
+        }
+
+        function calcTab6() {
+            const cfgA = getProductConfigTab6('a');
+            const cfgB = getProductConfigTab6('b');
+
+            // Update helper labels
+            document.getElementById('t6_a_init_kr').textContent = formatKoreanWon(cfgA.initial);
+            document.getElementById('t6_a_monthly_kr').textContent = formatKoreanWon(cfgA.monthly);
+            document.getElementById('t6_a_rate_val').textContent = cfgA.rate.toFixed(2);
+            document.getElementById('t6_a_fee_val').textContent = cfgA.fee.toFixed(2);
+
+            document.getElementById('t6_b_init_kr').textContent = formatKoreanWon(cfgB.initial);
+            document.getElementById('t6_b_monthly_kr').textContent = formatKoreanWon(cfgB.monthly);
+            document.getElementById('t6_b_rate_val').textContent = cfgB.rate.toFixed(2);
+            document.getElementById('t6_b_fee_val').textContent = cfgB.fee.toFixed(2);
+
+            const resA = calcSingleProductTab6(cfgA);
+            const resB = calcSingleProductTab6(cfgB);
+
+            // Update Table Headers & Cells
+            document.getElementById('t6_th_a').textContent = cfgA.name;
+            document.getElementById('t6_th_b').textContent = cfgB.name;
+
+            document.getElementById('t6_tb_a_prin').textContent = formatExactWon(resA.principal);
+            document.getElementById('t6_tb_b_prin').textContent = formatExactWon(resB.principal);
+
+            document.getElementById('t6_tb_a_gross').textContent = formatExactWon(resA.grossInterest);
+            document.getElementById('t6_tb_b_gross').textContent = formatExactWon(resB.grossInterest);
+
+            document.getElementById('t6_tb_a_tax').textContent = `-${formatExactWon(resA.taxAmount)}`;
+            document.getElementById('t6_tb_b_tax').textContent = `-${formatExactWon(resB.taxAmount)}`;
+
+            document.getElementById('t6_tb_a_fee').textContent = resA.feeCost > 0 ? `-${formatExactWon(resA.feeCost)}` : '0원';
+            document.getElementById('t6_tb_b_fee').textContent = resB.feeCost > 0 ? `-${formatExactWon(resB.feeCost)}` : '0원';
+
+            document.getElementById('t6_tb_a_net').textContent = `+${formatExactWon(resA.netInterest)}`;
+            document.getElementById('t6_tb_b_net').textContent = `+${formatExactWon(resB.netInterest)}`;
+
+            document.getElementById('t6_tb_a_total').textContent = formatExactWon(resA.netTotal);
+            document.getElementById('t6_tb_b_total').textContent = formatExactWon(resB.netTotal);
+
+            document.getElementById('t6_tb_a_yield').textContent = `+${resA.totalYieldPct.toFixed(2)}%`;
+            document.getElementById('t6_tb_b_yield').textContent = `+${resB.totalYieldPct.toFixed(2)}%`;
+
+            document.getElementById('t6_tb_a_annual_yield').textContent = `연 ${resA.annualYieldPct.toFixed(2)}%`;
+            document.getElementById('t6_tb_b_annual_yield').textContent = `연 ${resB.annualYieldPct.toFixed(2)}%`;
+
+            // Verdict Banner
+            const banner = document.getElementById('t6_winner_banner');
+            const title = document.getElementById('t6_winner_title');
+            const desc = document.getElementById('t6_winner_desc');
+            const diffEl = document.getElementById('t6_winner_diff');
+
+            const netDiff = Math.round(resA.netInterest) - Math.round(resB.netInterest);
+            if (netDiff > 0) {
+                banner.className = 'p-6 rounded-2xl text-white shadow-lg bg-gradient-to-r from-blue-600 to-indigo-700 flex flex-col md:flex-row md:items-center justify-between gap-4';
+                title.textContent = `🏆 [${cfgA.name}] 상품이 세후 순수익 ${formatExactWon(netDiff)} 더 유리합니다!`;
+                desc.textContent = `만기 세후 순수익 기준 ${cfgA.name}(+${formatKoreanWon(resA.netInterest)}, 원금대비 +${resA.totalYieldPct.toFixed(2)}%)이 ${cfgB.name}(+${formatKoreanWon(resB.netInterest)}, 원금대비 +${resB.totalYieldPct.toFixed(2)}%)보다 앞섭니다.`;
+                diffEl.textContent = `+${formatExactWon(netDiff)}`;
+            } else if (netDiff < 0) {
+                const absDiff = Math.abs(netDiff);
+                banner.className = 'p-6 rounded-2xl text-white shadow-lg bg-gradient-to-r from-emerald-600 to-teal-700 flex flex-col md:flex-row md:items-center justify-between gap-4';
+                title.textContent = `🏆 [${cfgB.name}] 상품이 세후 순수익 ${formatExactWon(absDiff)} 더 유리합니다!`;
+                desc.textContent = `만기 세후 순수익 기준 ${cfgB.name}(+${formatKoreanWon(resB.netInterest)}, 원금대비 +${resB.totalYieldPct.toFixed(2)}%)이 ${cfgA.name}(+${formatKoreanWon(resA.netInterest)}, 원금대비 +${resA.totalYieldPct.toFixed(2)}%)보다 앞섭니다.`;
+                diffEl.textContent = `+${formatExactWon(absDiff)}`;
+            } else {
+                banner.className = 'p-6 rounded-2xl text-white shadow-lg bg-gradient-to-r from-slate-600 to-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4';
+                title.textContent = `🤝 두 금융상품의 세후 실수령 순수익이 동일합니다!`;
+                desc.textContent = `두 상품 모두 세후 순수익 ${formatExactWon(resA.netInterest)}으로 같은 결과를 보입니다. 중도해지 조건이나 우대금리 달성 난이도를 비교해 보세요.`;
+                diffEl.textContent = `0원`;
+            }
+
+            // Render Bar Chart (chartTab6Bar)
+            const colors = getChartColors();
+            const ctxBar = document.getElementById('chartTab6Bar').getContext('2d');
+            if (chart6Bar) chart6Bar.destroy();
+            chart6Bar = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['세전 총 수익', '차감 세금·보수', '세후 실수령 순수익'],
+                    datasets: [
+                        {
+                            label: cfgA.name,
+                            data: [
+                                Math.round(resA.grossInterest),
+                                Math.round(resA.taxAmount + resA.feeCost),
+                                Math.round(resA.netInterest)
+                            ],
+                            backgroundColor: '#2563eb',
+                            borderRadius: 8
+                        },
+                        {
+                            label: cfgB.name,
+                            data: [
+                                Math.round(resB.grossInterest),
+                                Math.round(resB.taxAmount + resB.feeCost),
+                                Math.round(resB.netInterest)
+                            ],
+                            backgroundColor: '#10b981',
+                            borderRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: colors.text } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${formatExactWon(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: colors.text }, grid: { display: false } },
+                        y: {
+                            ticks: { color: colors.text, callback: (v) => formatKoreanWon(v) },
+                            grid: { color: colors.grid }
+                        }
+                    }
+                }
+            });
+
+            // Render Line Chart (chartTab6Line) across max months
+            const maxMonths = Math.max(cfgA.months, cfgB.months);
+            const step = maxMonths <= 24 ? 1 : (maxMonths <= 60 ? 3 : 6);
+            const lineLabels = [];
+            const seriesA = [];
+            const seriesB = [];
+
+            for (let m = step; m <= maxMonths; m += step) {
+                lineLabels.push(`${m}개월`);
+                const mA = Math.min(m, cfgA.months);
+                const mB = Math.min(m, cfgB.months);
+                seriesA.push(Math.round(simulateProductAtMonth(cfgA, mA, false).netTotal));
+                seriesB.push(Math.round(simulateProductAtMonth(cfgB, mB, false).netTotal));
+            }
+
+            const ctxLine = document.getElementById('chartTab6Line').getContext('2d');
+            if (chart6Line) chart6Line.destroy();
+            chart6Line = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: lineLabels,
+                    datasets: [
+                        {
+                            label: `${cfgA.name} (세후 누적자산)`,
+                            data: seriesA,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.25
+                        },
+                        {
+                            label: `${cfgB.name} (세후 누적자산)`,
+                            data: seriesB,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.25
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { labels: { color: colors.text } },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `${ctx.dataset.label}: ${formatExactWon(ctx.parsed.y)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { ticks: { color: colors.text }, grid: { color: colors.grid } },
+                        y: {
+                            ticks: { color: colors.text, callback: (v) => formatKoreanWon(v) },
+                            grid: { color: colors.grid }
+                        }
+                    }
+                }
+            });
+        }
+
         function updateAllCharts() {
             calcTab1();
             calcTab2();
             calcTab3();
             calcTab4();
             calcTab5();
+            calcTab6();
         }
 
         window.onload = function () {
